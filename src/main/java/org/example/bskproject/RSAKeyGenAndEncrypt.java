@@ -1,12 +1,12 @@
 package org.example.bskproject;
 
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,33 +28,40 @@ public class RSAKeyGenAndEncrypt {
     private static final int AES_KEY_SIZE = 256;
     private static final int PBKDF2_ITERATIONS = 65536;
     private static final int SALT_SIZE = 16;
-    private static final String USB_PATH = "F:/qwertz/usb_private_key.enc";
+    private static String USB_PATH;
     private static final String PUBLIC_KEY_PATH = "C:/qwertz/keys/public_key.pem";
 
     public static void encode() throws Exception {
-
-//        Getting user input for PIN using Scanner
+        // Getting user input for PIN using Scanner
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter PIN for key encryption: ");
         String pin = scanner.nextLine();
         scanner.close();
 
-//        Generating RSA 4096-bit key pair
+        // Generating RSA 4096-bit key pair
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
         keyPairGen.initialize(RSA_KEY_SIZE);
         KeyPair keyPair = keyPairGen.generateKeyPair();
 
-//        Using salt for additional security
+        // Using salt for additional security
         byte[] salt = generateSalt();
         SecretKey aesKey = generateAesFromPin(pin, salt);
 
         byte[] encryptedPrivateKey = encryptPrivateKey(keyPair.getPrivate(), aesKey);
 
-//        Saving the encrypted private key to USB pendrive and public key to filepath
-        saveToFile(USB_PATH, salt, encryptedPrivateKey);
-        savePublicKey(PUBLIC_KEY_PATH, keyPair.getPublic());
+        // Get the usb path
+        SharedState sharedState = SharedState.getInstance();
+        USB_PATH = sharedState.getPrivateKey().toString();
 
-        System.out.println("Keys generated and stored successfully.");
+        // Saving the encrypted private key to USB drive and public key to filepath
+        if (USB_PATH != null) {
+            saveToFile(USB_PATH, salt, encryptedPrivateKey);
+            savePublicKey(PUBLIC_KEY_PATH, keyPair.getPublic());
+
+            System.out.println("Keys generated and stored successfully.");
+        } else {
+            throw new Exception("USB device not found.");
+        }
     }
 
     private static byte[] generateSalt() {
@@ -96,6 +103,12 @@ public class RSAKeyGenAndEncrypt {
     }
 
     public static PrivateKey decryptPrivateKey(String pin) throws Exception {
+        // Get the usb path
+        SharedState sharedState = SharedState.getInstance();
+        USB_PATH = sharedState.getPrivateKey().toString();
+        if (USB_PATH == null) {
+            throw new Exception("USB device not found.");
+        }
         // Read encrypted key and salt from USB
         byte[] fileData = Files.readAllBytes(Paths.get(USB_PATH));
 

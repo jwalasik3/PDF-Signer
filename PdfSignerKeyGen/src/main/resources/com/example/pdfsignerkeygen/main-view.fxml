@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.pdfsignerkeygen.MainController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <Label text="PDF Signer Key Generator" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+    <TextField fx:id="publicKeyPathField" promptText="Enter the path for your public key."/>
+    <TextField fx:id="usbPathField" promptText="Enter the path for your private key (pendrive)."/>
+    <TextField fx:id="pinField" promptText="Enter the pin for generated keys."/>
+    <Button text="Generate keys" onAction="#generateKeys"/>
+    <Label fx:id="responseLabel" style="-fx-font-size: 16px;"/>
+</VBox>

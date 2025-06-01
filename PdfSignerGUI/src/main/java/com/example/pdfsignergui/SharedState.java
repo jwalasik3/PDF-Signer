@@ -6,6 +6,7 @@ public class SharedState {
     private static SharedState instance;
     private boolean driveFound;
     private File privateKeyFile;
+    private File selectedPdfFile;
 
     private SharedState() {}
 
@@ -30,5 +31,14 @@ public class SharedState {
 
     public void setPrivateKey(File privateKey) {
         this.privateKeyFile = privateKey;
+    }
+
+    public File setSelectedPdf(File pdfFile) {
+        this.selectedPdfFile = pdfFile;
+        return this.selectedPdfFile;
+    }
+
+    public File getSelectedPdf() {
+        return selectedPdfFile;
     }
 }

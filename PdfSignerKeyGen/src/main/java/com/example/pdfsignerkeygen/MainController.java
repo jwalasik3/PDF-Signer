@@ -4,6 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+/**
+ * MainController is the controller class for the main-view.fxml file.
+ * It handles user interactions and manages the generation of RSA keys
+ * and the encryption of the private key using AES encryption.
+ */
 public class MainController {
     @FXML
     private TextField pinField;
@@ -14,6 +19,10 @@ public class MainController {
     @FXML
     private Label responseLabel;
 
+    /**
+     * This method is called when the user clicks the "Generate Keys" button.
+     * @throws Exception if there is an error during key generation.
+     */
     @FXML
     protected void generateKeys() throws Exception {
         String pin = pinField.getText();

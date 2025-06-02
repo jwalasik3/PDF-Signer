@@ -12,7 +12,6 @@ import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Scanner;
 
 /**
  * This is an auxiliary class that generates an RSA key pair, encrypts the private key using AES encryption,
@@ -25,8 +24,6 @@ public class RSAKeyGenAndEncrypt {
     private static final int AES_KEY_SIZE = 256;
     private static final int PBKDF2_ITERATIONS = 65536;
     private static final int SALT_SIZE = 16;
-//    private static final String USB_PATH = "F:/qwertz/usb_private_key.enc";
-//    private static final String PUBLIC_KEY_PATH = "C:/keys/public_key.pem";
 
     public static void encode(String pin, String usbPath, String publicKeyPath) throws Exception {
 
@@ -85,29 +82,4 @@ public class RSAKeyGenAndEncrypt {
             fos.write(Base64.getEncoder().encode(publicKey.getEncoded()));
         }
     }
-
-    private static PrivateKey decryptPrivateKey(String pin, String usbPath) throws Exception {
-        // Read encrypted key and salt from USB
-        byte[] fileData = Files.readAllBytes(Paths.get(usbPath + "private_key.enc"));
-
-        // Extract salt (first 16 bytes) and encrypted private key
-        byte[] salt = Arrays.copyOfRange(fileData, 0, SALT_SIZE);
-        byte[] encryptedData = Arrays.copyOfRange(fileData, SALT_SIZE, fileData.length);
-
-        // Derive AES key from PIN and salt
-        SecretKey aesKey = deriveAESKeyFromPIN(pin, salt);
-
-        // Decrypt the private key
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        byte[] iv = Arrays.copyOfRange(encryptedData, 0, 16); // Extract IV (first 16 bytes)
-        byte[] encryptedKey = Arrays.copyOfRange(encryptedData, 16, encryptedData.length);
-
-        cipher.init(Cipher.DECRYPT_MODE, aesKey, new IvParameterSpec(iv));
-        byte[] decryptedKeyBytes = cipher.doFinal(encryptedKey);
-
-        // Convert decrypted bytes to PrivateKey object
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(decryptedKeyBytes));
-    }
-
 }

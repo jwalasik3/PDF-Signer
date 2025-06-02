@@ -6,9 +6,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
@@ -20,14 +18,29 @@ import java.nio.file.Path;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * JavaFX application for signing and verifying PDF files.
+ * This application monitors for a USB drive containing a private key,
+ * allows users to select a PDF file, and provides options to sign or verify the PDF.
+ */
 public class PdfSignerGui extends Application {
 
+    /**
+     * Initializes the JavaFX application.
+     *
+     * @param stage the primary stage for this application
+     * @throws IOException if the FXML file cannot be loaded
+     */
     @Override
     public void start(Stage stage) throws IOException {
         initAppView(stage);
         startDriveMonitoring();
     }
 
+    /**
+     * Starts monitoring for a USB drive containing the private key.
+     * This method runs in a background thread and checks every 2 seconds.
+     */
     private void startDriveMonitoring() {
         Timer timer = new Timer(true); // Daemon thread
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -42,6 +55,13 @@ public class PdfSignerGui extends Application {
         }, 0, 2000);
     }
 
+    /**
+     * Checks for a USB drive that contains the private key file.
+     * If found, updates the shared state with the drive information.
+     * If not found, updates the shared state to indicate no drive is present.
+     *
+     * @throws Exception if an error occurs while checking drives, but it is ignored since the method is called in a background thread.
+     */
     private void checkForDrive() throws Exception {
         File usbDrive = null;
 
@@ -76,6 +96,13 @@ public class PdfSignerGui extends Application {
         }
     }
 
+    /**
+     * Initializes the main application view.
+     * Loads the FXML layout, sets up the scene, and adds controls for signing and verifying PDFs.
+     *
+     * @param stage the primary stage for this application
+     * @throws IOException if the FXML file cannot be loaded
+     */
     private void initAppView(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(PdfSignerGui.class.getResource("main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
@@ -133,6 +160,13 @@ public class PdfSignerGui extends Application {
         stage.show();
     }
 
+    /**
+     * Creates a button that allows the user to select a PDF file.
+     * When clicked, it opens a file chooser dialog and updates the shared state with the selected PDF file.
+     *
+     * @param stage the primary stage for this application
+     * @return the button for selecting a PDF file
+     */
     private static Button getButton(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a PDF File");
@@ -152,6 +186,11 @@ public class PdfSignerGui extends Application {
         return choosePdf;
     }
 
+    /**
+     * The main method to launch the JavaFX application.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         launch();
     }

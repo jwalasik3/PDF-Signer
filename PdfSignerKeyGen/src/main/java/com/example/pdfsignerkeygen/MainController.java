@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.io.File;
+
 /**
  * MainController is the controller class for the main-view.fxml file.
  * It handles user interactions and manages the generation of RSA keys
@@ -26,14 +28,18 @@ public class MainController {
     @FXML
     protected void generateKeys() throws Exception {
         String pin = pinField.getText();
-        String usbPath = usbPathField.getText();
-        String publicKeyPath = publicKeyPathField.getText();
+        String usbPath = usbPathField.getText() + ".keys\\";
         try {
-            RSAKeyGenAndEncrypt.encode(pin, usbPath, publicKeyPath);
+            RSAKeyGenAndEncrypt.encode(pin, usbPath, usbPath);
             responseLabel.setText("Keys generated and stored successfully.");
         } catch (Exception e) {
             e.printStackTrace();
             responseLabel.setText("Error generating keys: " + e.getMessage());
         }
+    }
+
+    @FXML
+    public void setUsbPath(String path) {
+        usbPathField.setText(path);
     }
 }

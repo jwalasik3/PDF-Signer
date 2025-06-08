@@ -12,8 +12,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <Label text="PDF Signer Key Generator" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-    <TextField fx:id="publicKeyPathField" promptText="Enter the path for your public key."/>
-    <TextField fx:id="usbPathField" promptText="Enter the path for your private key (pendrive)."/>
+    <TextField fx:id="usbPathField" promptText="Enter the path for your pendrive."/>
     <TextField fx:id="pinField" promptText="Enter the pin for generated keys."/>
     <Button text="Generate keys" onAction="#generateKeys"/>
     <Label fx:id="responseLabel" style="-fx-font-size: 16px;"/>

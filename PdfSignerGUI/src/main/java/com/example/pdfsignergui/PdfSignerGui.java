@@ -15,6 +15,7 @@ import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,6 +25,9 @@ import java.util.TimerTask;
  * allows users to select a PDF file, and provides options to sign or verify the PDF.
  */
 public class PdfSignerGui extends Application {
+    DriveCheck checker;
+    File usbPath = null;
+    static File pdfFile = null;
 
     /**
      * Initializes the JavaFX application.
@@ -34,66 +38,9 @@ public class PdfSignerGui extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         initAppView(stage);
-        startDriveMonitoring();
-    }
 
-    /**
-     * Starts monitoring for a USB drive containing the private key.
-     * This method runs in a background thread and checks every 2 seconds.
-     */
-    private void startDriveMonitoring() {
-        Timer timer = new Timer(true); // Daemon thread
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    checkForDrive();
-                } catch (Exception e) {
-                    // Ignore exceptions for inaccessible drives
-                }
-            }
-        }, 0, 2000);
-    }
-
-    /**
-     * Checks for a USB drive that contains the private key file.
-     * If found, updates the shared state with the drive information.
-     * If not found, updates the shared state to indicate no drive is present.
-     *
-     * @throws Exception if an error occurs while checking drives, but it is ignored since the method is called in a background thread.
-     */
-    private void checkForDrive() throws Exception {
-        File usbDrive = null;
-
-        for (Path root : FileSystems.getDefault().getRootDirectories()) {
-            try {
-                FileStore store = Files.getFileStore(root);
-                String type = store.type().toLowerCase();
-
-                boolean isRemovable = store.toString().toLowerCase().contains("removable")
-                        || type.contains("fat")
-                        || type.contains("exfat");
-
-                File rootFile = root.toFile();
-
-                if (isRemovable && rootFile.canRead() && rootFile.getTotalSpace() > 0) {
-                    usbDrive = rootFile;
-                    break;
-                }
-
-            } catch (Exception e){
-                // Ignoring inaccessible drives
-            }
-        }
-        SharedState sharedState = SharedState.getInstance();
-
-        if (usbDrive != null && !sharedState.isDriveFound()) {
-            sharedState.setDriveFound(true);
-            File usbPath = new File(usbDrive, "private_key.enc");
-            sharedState.setPrivateKey(usbPath);
-        } else if (usbDrive == null && sharedState.isDriveFound()) {
-            sharedState.setDriveFound(false);
-        }
+        checker = new DriveCheck();
+        checker.startDriveMonitoring();
     }
 
     /**
@@ -117,10 +64,43 @@ public class PdfSignerGui extends Application {
         signPdfRadio.setToggleGroup(toggleGroup);
         verifyPdfRadio.setToggleGroup(toggleGroup);
 
+        PasswordField pinField = new PasswordField();
+        pinField.setPromptText("Pin");
+        pinField.setMaxWidth(60);
+        pinField.setVisible(false);
+
         Button signButton = new Button("Sign PDF");
         signButton.setOnAction(event -> {
-            // Action for signing a PDF
-            System.out.println("Signing PDF...");
+            if (checker.getUsbFile() != null) {
+                // Get private key file
+                usbPath = new File(checker.getUsbFile(), ".keys\\private_key.enc");
+
+                // Check for pin
+                if (pinField.getText() == null) {
+                    System.out.println("Pin not provided.");
+                    return;
+                }
+
+                // Checking for PDF file
+                if (pdfFile == null) {
+                    System.out.println("No PDF selected.");
+                    return;
+                }
+
+                File destPdfFile = new File(pdfFile.getParent(), "signed_" + pdfFile.getName());
+
+                // Signing the PDF file
+                try {
+                    PdfSignerUtil.signPdf(pdfFile, destPdfFile, usbPath, pinField.getText());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            } else {
+                System.out.println("No USB drive found.");
+                return;
+            }
+
         });
         signButton.setVisible(false);
 
@@ -146,17 +126,19 @@ public class PdfSignerGui extends Application {
                 if (rb != null) {
                     String s = rb.getText();
                     if (s.equals("Sign a PDF")) {
+                        pinField.setVisible(true);
                         signButton.setVisible(true);
                         verifyButton.setVisible(false);
                     }
                     else if (s.equals("Verify a PDF Signature")) {
+                        pinField.setVisible(false);
                         verifyButton.setVisible(true);
                         signButton.setVisible(false);
                     }
                 }
             }
         });
-        root.getChildren().addAll(welcomeLabel, signPdfRadio, verifyPdfRadio, choosePdf, pdfName, signButton, verifyButton);
+        root.getChildren().addAll(welcomeLabel, signPdfRadio, verifyPdfRadio, choosePdf, pdfName, pinField, signButton, verifyButton);
         stage.show();
     }
 
@@ -175,8 +157,7 @@ public class PdfSignerGui extends Application {
             File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
                 System.out.println("Selected PDF: " + file.getAbsolutePath());
-                SharedState sharedState = SharedState.getInstance();
-                sharedState.setSelectedPdf(file);
+                pdfFile = file;
                 Label pdfName = (Label) stage.getScene().lookup("#pdfName");
                 if (pdfName != null) {
                     pdfName.setText("Selected PDF: " + file.getName());

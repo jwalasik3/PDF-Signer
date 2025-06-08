@@ -7,6 +7,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -38,9 +39,23 @@ public class RSAKeyGenAndEncrypt {
 
         byte[] encryptedPrivateKey = encryptPrivateKey(keyPair.getPrivate(), aesKey);
 
+        File usbFile = new File(usbPath, "private_key.enc");
+        File parent = usbFile.getParentFile();
+        if (parent != null && !parent.exists()) {
+            parent.mkdirs();  // Creates parent directory if it doesn't exist
+            Files.setAttribute(Path.of(usbPath), "dos:hidden", true);
+        }
+
+        File pubFile = new File(publicKeyPath, "public_key.pem");
+        System.out.println(pubFile);
+        File parentDir = pubFile.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs(); // Create the directories if they don't exist
+        }
+
 //        Saving the encrypted private key to USB pendrive and public key to filepath
-        saveToFile(usbPath + "private_key.enc", salt, encryptedPrivateKey);
-        savePublicKey(publicKeyPath + "public_key.pem", keyPair.getPublic());
+        saveToFile(String.valueOf(usbFile), salt, encryptedPrivateKey);
+        savePublicKey(String.valueOf(pubFile), keyPair.getPublic());
 
         System.out.println("Keys generated and stored successfully.");
     }

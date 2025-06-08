@@ -2,6 +2,7 @@ package com.example.pdfsignerkeygen;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -13,7 +14,6 @@ import java.io.IOException;
  * It loads the main-view.fxml file to display the UI (all UI components are defined in that file).
  */
 public class MainView extends Application {
-
     /**
      * The start method is called by the JavaFX runtime to initialize the application.
      * It loads the FXML file and sets up the main stage with the scene.
@@ -28,6 +28,10 @@ public class MainView extends Application {
         stage.setTitle("PDF Signer Key Generator");
         stage.setScene(scene);
         stage.show();
+
+        MainController controller = fxmlLoader.getController();
+        DriveCheck checker = new DriveCheck(controller);
+        checker.startDriveMonitoring();
     }
 
     /**

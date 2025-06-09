@@ -1,18 +1,33 @@
 package com.example.pdfsignerkeygen;
 
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.KeyUsage;
+import org.bouncycastle.cert.CertIOException;
+import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
+import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Arrays;
-import java.util.Base64;
+import java.util.*;
 
 /**
  * This is an auxiliary class that generates an RSA key pair, encrypts the private key using AES encryption,
@@ -26,14 +41,20 @@ public class RSAKeyGenAndEncrypt {
     private static final int PBKDF2_ITERATIONS = 65536;
     private static final int SALT_SIZE = 16;
 
+    // Cert provider
+    static {
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+    }
+
     public static void encode(String pin, String usbPath, String publicKeyPath) throws Exception {
 
-//        Generating RSA 4096-bit key pair
+        // Generating RSA 4096-bit key pair
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
         keyPairGen.initialize(RSA_KEY_SIZE);
         KeyPair keyPair = keyPairGen.generateKeyPair();
+        generateSelfSignedCert(keyPair);
 
-//        Deriving AES key from PIN with salt to prevent rainbow table attacks
+        // Deriving AES key from PIN with salt to prevent rainbow table attacks
         byte[] salt = generateSalt();
         SecretKey aesKey = deriveAESKeyFromPIN(pin, salt);
 
@@ -53,7 +74,7 @@ public class RSAKeyGenAndEncrypt {
             parentDir.mkdirs(); // Create the directories if they don't exist
         }
 
-//        Saving the encrypted private key to USB pendrive and public key to filepath
+        // Saving the encrypted private key to USB pendrive and public key to filepath
         saveToFile(String.valueOf(usbFile), salt, encryptedPrivateKey);
         savePublicKey(String.valueOf(pubFile), keyPair.getPublic());
 
@@ -95,6 +116,84 @@ public class RSAKeyGenAndEncrypt {
     private static void savePublicKey(String path, PublicKey publicKey) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(path)) {
             fos.write(Base64.getEncoder().encode(publicKey.getEncoded()));
+        }
+    }
+
+    private static void generateSelfSignedCert(KeyPair keyPair) throws Exception {
+        try {
+            String subjectDN = "CN=PAdES Emulation Cert, OU=BSK_Proj, O=193382&193650, L=Gdansk, ST=Pomeranian, C=PL";
+            X500Name issuerName = new X500Name(subjectDN);
+            X500Name subjectName = new X500Name(subjectDN);
+
+            // Generating a random serial number
+            BigInteger serialNumber = BigInteger.valueOf(new Random().nextLong() & Long.MAX_VALUE);
+
+            // Setting validity period
+            Calendar calendar = Calendar.getInstance();
+            Date notBefore = calendar.getTime();
+            calendar.add(Calendar.YEAR, 1);
+            Date notAfter = calendar.getTime();
+
+            String signatureAlgorithm = "SHA256WithRSAEncryption";
+
+            // Creating the cert
+            X509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
+                    issuerName,
+                    serialNumber,
+                    notBefore,
+                    notAfter,
+                    subjectName,
+                    keyPair.getPublic()
+            );
+
+            JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
+
+            // Setting as a self-signed cert
+            boolean isCA = false;
+            certBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(isCA));
+
+            // Setting that the key can be used for signing
+            certBuilder.addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.digitalSignature));
+
+            certBuilder.addExtension(Extension.subjectKeyIdentifier, false,
+                    extUtils.createSubjectKeyIdentifier(keyPair.getPublic()));
+            certBuilder.addExtension(Extension.authorityKeyIdentifier, false,
+                    extUtils.createAuthorityKeyIdentifier(keyPair.getPublic()));
+
+            // Signing the cert
+            ContentSigner contentSigner = new JcaContentSignerBuilder(signatureAlgorithm)
+                    .setProvider("BC")
+                    .build(keyPair.getPrivate());
+
+            X509Certificate certificate = new JcaX509CertificateConverter()
+                    .setProvider("BC")
+                    .getCertificate(certBuilder.build(contentSigner));
+
+            System.out.println("\nSelf-Signed X.509 Certificate Generated:");
+            System.out.println("Subject DN: " + certificate.getSubjectX500Principal().getName());
+            System.out.println("Issuer DN: " + certificate.getIssuerX500Principal().getName());
+            System.out.println("Serial Number: " + certificate.getSerialNumber());
+            System.out.println("Valid From: " + certificate.getNotBefore());
+            System.out.println("Valid To: " + certificate.getNotAfter());
+            System.out.println("Signature Algorithm: " + certificate.getSigAlgName());
+            System.out.println("Public Key: " + certificate.getPublicKey());
+
+            // Saving to file
+            String certPath = "../Certs";
+            File certFile = new File(certPath, "cert_for_signing.cer");
+            File parentDir = certFile.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs(); // Create the directory if it doesn't exist
+            }
+            try (FileOutputStream fos = new FileOutputStream(certFile)) {
+                fos.write(certificate.getEncoded());
+                System.out.println("\nCert saved to: " + certFile);
+            }
+
+        } catch (NoSuchAlgorithmException | OperatorCreationException | CertificateException | CertIOException e) {
+            System.err.println("Error creating a cert: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Error writing cert to file: " + e.getMessage());
         }
     }
 }

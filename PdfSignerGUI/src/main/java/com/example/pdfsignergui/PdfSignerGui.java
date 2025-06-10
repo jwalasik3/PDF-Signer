@@ -151,7 +151,9 @@ public class PdfSignerGui extends Application {
                 }
             }
         });
-        root.getChildren().addAll(welcomeLabel, signPdfRadio, verifyPdfRadio, choosePdf, pdfName, pinField, signButton, verifyButton);
+        Label stateLabel = new Label("");
+        stateLabel.setId("stateLabel");
+        root.getChildren().addAll(welcomeLabel, signPdfRadio, verifyPdfRadio, choosePdf, pdfName, pinField, signButton, verifyButton, stateLabel);
         stage.show();
     }
 

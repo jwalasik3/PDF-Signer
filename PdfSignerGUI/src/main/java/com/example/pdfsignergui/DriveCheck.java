@@ -14,8 +14,6 @@ public class DriveCheck {
 
     private void checkForDrive() throws Exception {
         Boolean found = false;
-
-        System.out.println("Looking for a removable drive...");
         for (Path root : FileSystems.getDefault().getRootDirectories()) {
             try {
                 FileStore store = Files.getFileStore(root);
@@ -29,7 +27,6 @@ public class DriveCheck {
 
                 if (isRemovable && rootFile.canRead() && rootFile.getTotalSpace() > 0) {
                     usbDrive = rootFile;
-                    System.out.println("Found drive: " + usbDrive.toString());
                     found = true;
                     break;
                 }
@@ -41,10 +38,8 @@ public class DriveCheck {
 
         if (found && !isDetected) {
             isDetected = true;
-            System.out.println("Getting drive.");
         } else if (!found && isDetected) {
             isDetected = false;
-            System.out.println("No drive found.");
             usbDrive = null;
         }
     }

@@ -105,6 +105,8 @@ public class PdfSignerUtil {
     }
 
     public static boolean verifySignature(File pdfPath) {
+        BouncyCastleProvider provider = new BouncyCastleProvider();
+        Security.addProvider(provider);
         try {
             PdfDocument pdfDoc = new PdfDocument(new PdfReader(pdfPath));
             PdfAcroForm acroForm = PdfAcroForm.getAcroForm(pdfDoc, false);
@@ -139,7 +141,7 @@ public class PdfSignerUtil {
             }
             return true;
         } catch (Exception e) {
-            System.err.println("Error verifying signature: " + e.getMessage());
+            System.out.println("Error during PDF signature verification: " + e.getMessage());
             return false;
         }
     }

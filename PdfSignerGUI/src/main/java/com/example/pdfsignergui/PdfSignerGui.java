@@ -98,7 +98,6 @@ public class PdfSignerGui extends Application {
 
             } else {
                 System.out.println("No USB drive found.");
-                return;
             }
 
         });
@@ -106,8 +105,22 @@ public class PdfSignerGui extends Application {
 
         Button verifyButton = new Button("Verify PDF Signature");
         verifyButton.setOnAction(event -> {
-            // Action for verifying a PDF signature
-            System.out.println("Verifying PDF Signature...");
+            if (pdfFile == null) {
+                System.out.println("No PDF selected.");
+                return;
+            }
+
+            try {
+                System.out.println("Verifying PDF signature...");
+                boolean isValid = PdfSignerUtil.verifySignature(pdfFile);
+                if (isValid) {
+                    System.out.println("The PDF signature is valid.");
+                } else {
+                    System.out.println("The PDF signature is invalid.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error during PDF signature verification: " + e.getMessage());
+            }
         });
         verifyButton.setVisible(false);
 

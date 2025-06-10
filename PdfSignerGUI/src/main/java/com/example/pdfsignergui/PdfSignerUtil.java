@@ -1,15 +1,12 @@
 package com.example.pdfsignergui;
 
+import com.itextpdf.forms.PdfAcroForm;
+import com.itextpdf.forms.fields.PdfFormField;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfName;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.StampingProperties;
-import com.itextpdf.signatures.BouncyCastleDigest;
-import com.itextpdf.signatures.DigestAlgorithms;
-import com.itextpdf.signatures.IExternalDigest;
-import com.itextpdf.signatures.IExternalSignature;
-import com.itextpdf.signatures.PdfSignatureAppearance;
-import com.itextpdf.signatures.PdfSigner;
-import com.itextpdf.signatures.PrivateKeySignature;
+import com.itextpdf.signatures.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
@@ -104,6 +101,46 @@ public class PdfSignerUtil {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             Certificate cert = cf.generateCertificate(fis);
             return new Certificate[]{cert};
+        }
+    }
+
+    public static boolean verifySignature(File pdfPath) {
+        try {
+            PdfDocument pdfDoc = new PdfDocument(new PdfReader(pdfPath));
+            PdfAcroForm acroForm = PdfAcroForm.getAcroForm(pdfDoc, false);
+
+            if (acroForm == null || acroForm.getFormFields().isEmpty()) {
+                System.out.println("No signatures found in the PDF.");
+                return false;
+            }
+
+            Certificate[] chain = loadCertificateChain();
+            X509Certificate signingCert = (X509Certificate) chain[0];
+
+            SignatureUtil signatureUtil = new SignatureUtil(pdfDoc);
+            for (String name : acroForm.getFormFields().keySet()) {
+                PdfFormField field = acroForm.getField(name);
+                if (!PdfName.Sig.equals(field.getFormType())) {
+                    continue;
+                }
+                PdfPKCS7 pkcs7 = signatureUtil.readSignatureData(name);
+                if (pkcs7.verifySignatureIntegrityAndAuthenticity()) {
+                    System.out.println("Signature " + name + " is valid.");
+                    if (pkcs7.getSigningCertificate().getPublicKey().equals(signingCert.getPublicKey())) {
+                        System.out.println("Signature matches the public key.");
+                    } else {
+                        System.out.println("Signature does not match the public key.");
+                        return false;
+                    }
+                } else {
+                    System.out.println("Signature " + name + " is invalid.");
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error verifying signature: " + e.getMessage());
+            return false;
         }
     }
 }

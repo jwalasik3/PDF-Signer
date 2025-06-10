@@ -11,29 +11,40 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileStore;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
- * JavaFX application for signing and verifying PDF files.
- * This application monitors for a USB drive containing a private key,
- * allows users to select a PDF file, and provides options to sign or verify the PDF.
+ * @brief JavaFX application for signing and verifying PDF files.
+ * This application provides a graphical user interface for digital signature operations
+ * on PDF documents. It includes features to monitor for a USB drive containing a private key,
+ * allow users to select a PDF file, and then either sign the PDF or verify an existing signature.
+ *
+ * @author Jakub Walasik
+ * @version 1.0
  */
 public class PdfSignerGui extends Application {
+    /**
+     * @brief An instance of DriveCheck to monitor USB drive presence.
+     */
     DriveCheck checker;
+    /**
+     * @brief Stores the path to the private key file on the USB drive.
+     * Initialized when a USB drive is detected and a signing operation is requested.
+     */
     File usbPath = null;
+    /**
+     * @brief Stores the currently selected PDF file by the user.
+     * This file is used for both signing and verification operations.
+     */
     static File pdfFile = null;
 
     /**
-     * Initializes the JavaFX application.
+     * @brief The main entry point for the JavaFX application.
+     * This method initializes the application's user interface, sets up the primary stage,
+     * and starts the background monitoring for USB drives.
      *
-     * @param stage the primary stage for this application
-     * @throws IOException if the FXML file cannot be loaded
+     * @param stage The primary {@link javafx.stage.Stage} for this application, onto which
+     * the scene is set.
+     * @throws IOException If the FXML file (main-view.fxml) cannot be loaded.
      */
     @Override
     public void start(Stage stage) throws IOException {
@@ -44,11 +55,14 @@ public class PdfSignerGui extends Application {
     }
 
     /**
-     * Initializes the main application view.
-     * Loads the FXML layout, sets up the scene, and adds controls for signing and verifying PDFs.
+     * @brief Initializes the main application view (GUI elements and their listeners).
+     * This private helper method loads the FXML layout, sets up the scene, and
+     * configures the various UI controls such as radio buttons for selecting modes,
+     * password fields, and action buttons for signing and verifying PDFs.
+     * It also defines listeners for UI element interactions.
      *
-     * @param stage the primary stage for this application
-     * @throws IOException if the FXML file cannot be loaded
+     * @param stage The primary {@link javafx.stage.Stage} where the UI elements will be displayed.
+     * @throws IOException If the FXML file (main-view.fxml) cannot be loaded.
      */
     private void initAppView(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(PdfSignerGui.class.getResource("main-view.fxml"));
@@ -70,13 +84,20 @@ public class PdfSignerGui extends Application {
         pinField.setVisible(false);
 
         Button signButton = new Button("Sign PDF");
+        /**
+         * @brief Defines the action to be performed when the "Sign PDF" button is clicked.
+         *
+         * This lambda expression checks for the presence of a USB drive and a selected PDF file,
+         * retrieves the PIN, and then calls {@link PdfSignerUtil#signPdf} to sign the document.
+         * Provides feedback to the console if conditions are not met (e.g., no USB, no PDF, no PIN).
+         */
         signButton.setOnAction(event -> {
             if (checker.getUsbFile() != null) {
                 // Get private key file
                 usbPath = new File(checker.getUsbFile(), ".keys\\private_key.enc");
 
                 // Check for pin
-                if (pinField.getText() == null) {
+                if (pinField.getText() == null || pinField.getText().isEmpty()) { // Added isEmpty() check
                     System.out.println("Pin not provided.");
                     return;
                 }
@@ -92,8 +113,12 @@ public class PdfSignerGui extends Application {
                 // Signing the PDF file
                 try {
                     PdfSignerUtil.signPdf(pdfFile, destPdfFile, usbPath, pinField.getText());
+                    System.out.println("PDF signed successfully: " + destPdfFile.getAbsolutePath()); // Added success message
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    System.err.println("Error signing PDF: " + e.getMessage()); // Use err for errors
+                    // Optionally, show an alert to the user
+                    // new Alert(Alert.AlertType.ERROR, "Error signing PDF: " + e.getMessage()).showAndWait();
+                    throw new RuntimeException("Failed to sign PDF", e); // Re-throw with more context
                 }
 
             } else {
@@ -104,6 +129,13 @@ public class PdfSignerGui extends Application {
         signButton.setVisible(false);
 
         Button verifyButton = new Button("Verify PDF Signature");
+        /**
+         * @brief Defines the action to be performed when the "Verify PDF Signature" button is clicked.
+         *
+         * This lambda expression checks for a selected PDF file and then calls
+         * {@link PdfSignerUtil#verifySignature} to check the integrity and authenticity of the signature.
+         * Provides feedback to the console regarding the signature's validity.
+         */
         verifyButton.setOnAction(event -> {
             if (pdfFile == null) {
                 System.out.println("No PDF selected.");
@@ -119,17 +151,35 @@ public class PdfSignerGui extends Application {
                     System.out.println("The PDF signature is invalid.");
                 }
             } catch (Exception e) {
-                System.out.println("Error during PDF signature verification: " + e.getMessage());
+                System.err.println("Error during PDF signature verification: " + e.getMessage()); // Use err for errors
+                // Optionally, show an alert to the user
+                // new Alert(Alert.AlertType.ERROR, "Error during PDF signature verification: " + e.getMessage()).showAndWait();
             }
         });
         verifyButton.setVisible(false);
 
         Button choosePdf = getButton(stage);
         Label pdfName = new Label("No PDF selected");
-        pdfName.setId("pdfName");
+        pdfName.setId("pdfName"); // ID for lookup
 
+        /**
+         * @brief Listener for changes in the selected radio button within the ToggleGroup.
+         *
+         * This ChangeListener manages the visibility of the PIN field, "Sign PDF" button,
+         * and "Verify PDF Signature" button based on the user's selection
+         * (either "Sign a PDF" or "Verify a PDF Signature").
+         */
         toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
         {
+            /**
+             * @brief Called when the selected toggle in the {@link ToggleGroup} changes.
+             *
+             * Adjusts the visibility of UI elements based on whether the user wants to sign or verify a PDF.
+             *
+             * @param ob The {@link ObservableValue} that changed (the ToggleGroup's selectedToggleProperty).
+             * @param o The old (previously selected) Toggle.
+             * @param n The new (currently selected) Toggle.
+             */
             public void changed(ObservableValue<? extends Toggle> ob,
                                 Toggle o, Toggle n)
             {
@@ -152,22 +202,35 @@ public class PdfSignerGui extends Application {
             }
         });
         Label stateLabel = new Label("");
-        stateLabel.setId("stateLabel");
+        stateLabel.setId("stateLabel"); // ID for lookup (e.g., by DriveCheck to update USB status)
         root.getChildren().addAll(welcomeLabel, signPdfRadio, verifyPdfRadio, choosePdf, pdfName, pinField, signButton, verifyButton, stateLabel);
         stage.show();
     }
 
     /**
-     * Creates a button that allows the user to select a PDF file.
-     * When clicked, it opens a file chooser dialog and updates the shared state with the selected PDF file.
+     * @brief Creates and configures a button for selecting a PDF file.
      *
-     * @param stage the primary stage for this application
-     * @return the button for selecting a PDF file
+     * This static helper method sets up a {@link javafx.stage.FileChooser} to allow the user
+     * to browse and select a PDF file from their system. Upon selection, it updates
+     * the static `pdfFile` variable and the `pdfName` label in the GUI.
+     *
+     * @param stage The primary {@link javafx.stage.Stage} that owns the file chooser dialog.
+     * @return A {@link javafx.scene.control.Button} instance configured to open a PDF file chooser.
      */
     private static Button getButton(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a PDF File");
+        // Optionally, add file filters if you want to restrict file types
+        // fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+
         Button choosePdf = new Button("Choose PDF File");
+        /**
+         * @brief Event handler for the "Choose PDF File" button.
+         *
+         * Opens a file selection dialog. If a file is selected, it updates the
+         * `pdfFile` static variable and the `pdfName` label in the UI to reflect
+         * the chosen file's name.
+         */
         choosePdf.setOnAction(event -> {
             File file = fileChooser.showOpenDialog(stage);
             if (file != null) {
@@ -183,9 +246,11 @@ public class PdfSignerGui extends Application {
     }
 
     /**
-     * The main method to launch the JavaFX application.
+     * @brief The main method that launches the JavaFX application.
      *
-     * @param args command line arguments
+     * This is the standard entry point for all JavaFX applications.
+     *
+     * @param args Command line arguments passed to the application. Not directly used in this application.
      */
     public static void main(String[] args) {
         launch();

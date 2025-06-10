@@ -9,17 +9,28 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * MainView is the entry point of the JavaFX application that provides a user interface
- * for generating RSA keys and encrypting the private key using AES encryption.
- * It loads the main-view.fxml file to display the UI (all UI components are defined in that file).
+ * @brief Main entry point for the PDF Signer Key Generator JavaFX application.
+ *
+ * The `MainView` class initializes and displays the user interface
+ * responsible for generating RSA keys and encrypting the private key
+ * for secure storage. It loads its UI components from the `main-view.fxml` file.
+ *
+ * @author Your Name (You can replace this with your actual name)
+ * @version 1.0
  */
 public class MainView extends Application {
     /**
-     * The start method is called by the JavaFX runtime to initialize the application.
-     * It loads the FXML file and sets up the main stage with the scene.
+     * @brief The primary start method for the JavaFX application.
      *
-     * @param stage The primary stage for this application, onto which the application scene can be set.
-     * @throws IOException If the FXML file cannot be loaded.
+     * This method is automatically called by the JavaFX runtime upon application launch.
+     * It loads the FXML layout for the main view, sets up the scene, and displays
+     * the primary stage. It also initializes the `MainController` and starts
+     * a `DriveCheck` service to monitor for USB drives.
+     *
+     * @param stage The primary {@link javafx.stage.Stage} for this application,
+     * onto which the application's scene is set.
+     * @throws IOException If the `main-view.fxml` file cannot be loaded,
+     * indicating a problem with the UI resource.
      */
     @Override
     public void start(Stage stage) throws IOException {
@@ -29,16 +40,23 @@ public class MainView extends Application {
         stage.setScene(scene);
         stage.show();
 
+        // Get the controller instance to pass to DriveCheck
         MainController controller = fxmlLoader.getController();
+        // Initialize and start the DriveCheck service, passing the controller
+        // to allow it to update the UI with drive detection status.
         DriveCheck checker = new DriveCheck(controller);
         checker.startDriveMonitoring();
     }
 
     /**
-     * The main method is the entry point of the JavaFX application.
-     * It launches the application by calling the launch method.
+     * @brief The main method to launch the JavaFX application.
      *
-     * @param args Command line arguments (not used in this application).
+     * This is the standard entry point for any Java application.
+     * It calls `Application.launch()` to start the JavaFX runtime and
+     * subsequently invoke the `start()` method.
+     *
+     * @param args Command line arguments passed to the application.
+     * These are not explicitly used in this application.
      */
     public static void main(String[] args) {
         launch();

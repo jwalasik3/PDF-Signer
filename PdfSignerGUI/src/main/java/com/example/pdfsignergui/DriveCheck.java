@@ -1,5 +1,7 @@
 package com.example.pdfsignergui;
 
+import javafx.application.Platform;
+
 import java.io.File;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
@@ -38,9 +40,11 @@ public class DriveCheck {
 
         if (found && !isDetected) {
             isDetected = true;
+            Platform.runLater(() ->  PdfSignerGui.setUsbLabel("Hardware key detected: " + usbDrive));
         } else if (!found && isDetected) {
             isDetected = false;
             usbDrive = null;
+            Platform.runLater(() ->  PdfSignerGui.setUsbLabel("Hardware key not connected."));
         }
     }
 
@@ -59,6 +63,9 @@ public class DriveCheck {
     }
 
     public String getUsbFile(){
-        return usbDrive.toString();
+        if (usbDrive != null) {
+            return usbDrive.toString();
+        }
+        return null;
     }
 }

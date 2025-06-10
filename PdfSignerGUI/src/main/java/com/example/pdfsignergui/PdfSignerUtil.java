@@ -8,6 +8,8 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.StampingProperties;
 import com.itextpdf.signatures.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -17,13 +19,15 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.file.Files;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.Security;
+import java.nio.file.Paths;
+import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collections;
 
@@ -39,6 +43,7 @@ public class PdfSignerUtil {
         Certificate[] chain = loadCertificateChain();
 
         System.out.println("Signing...");
+        PdfSignerGui.setStateLabel("Signing...");
         PdfSigner signer = new PdfSigner(new PdfReader(srcPdfPath), new FileOutputStream(destPdfPath), new StampingProperties());
 
         PdfSignatureAppearance appearance = signer.getSignatureAppearance();
@@ -57,6 +62,7 @@ public class PdfSignerUtil {
 
         signer.signDetached(digest, signature, chain, null, null, null, 0, PdfSigner.CryptoStandard.CADES);
         System.out.println("Signed.");
+        PdfSignerGui.setStateLabel("Pdf Signed.");
     }
 
     public static PrivateKey decryptPrivateKey(File encryptedFile, String pin) throws Exception {
@@ -104,7 +110,7 @@ public class PdfSignerUtil {
         }
     }
 
-    public static boolean verifySignature(File pdfPath) {
+    public static boolean verifySignature(File pdfPath, PublicKey publicKey) {
         BouncyCastleProvider provider = new BouncyCastleProvider();
         Security.addProvider(provider);
         try {
@@ -113,11 +119,9 @@ public class PdfSignerUtil {
 
             if (acroForm == null || acroForm.getFormFields().isEmpty()) {
                 System.out.println("No signatures found in the PDF.");
+                PdfSignerGui.setStateLabel("No signatures found in the PDF.");
                 return false;
             }
-
-            Certificate[] chain = loadCertificateChain();
-            X509Certificate signingCert = (X509Certificate) chain[0];
 
             SignatureUtil signatureUtil = new SignatureUtil(pdfDoc);
             for (String name : acroForm.getFormFields().keySet()) {
@@ -125,25 +129,59 @@ public class PdfSignerUtil {
                 if (!PdfName.Sig.equals(field.getFormType())) {
                     continue;
                 }
+
                 PdfPKCS7 pkcs7 = signatureUtil.readSignatureData(name);
+                System.out.println("Checking signature integrity...");
+                PdfSignerGui.setStateLabel("Checking signature integrity...");
+
                 if (pkcs7.verifySignatureIntegrityAndAuthenticity()) {
                     System.out.println("Signature " + name + " is valid.");
-                    if (pkcs7.getSigningCertificate().getPublicKey().equals(signingCert.getPublicKey())) {
+                    PdfSignerGui.setStateLabel("Signature " + name + " is valid.");
+
+                    if(publicKey == null){
+                        PdfSignerGui.setStateLabel("No public key given.");
+                        return false;
+                    }
+                    if (pkcs7.getSigningCertificate().getPublicKey().equals(publicKey)) {
                         System.out.println("Signature matches the public key.");
+                        PdfSignerGui.setStateLabel("Signature matches the public key.");
                     } else {
                         System.out.println("Signature does not match the public key.");
+                        PdfSignerGui.setStateLabel("Signature does not match the public key.");
+                        pdfDoc.close();
                         return false;
                     }
                 } else {
                     System.out.println("Signature " + name + " is invalid.");
+                    PdfSignerGui.setStateLabel("Signature " + name + " is invalid.");
+                    pdfDoc.close();
                     return false;
                 }
             }
+            pdfDoc.close();
             return true;
         } catch (Exception e) {
             System.out.println("Error during PDF signature verification: " + e.getMessage());
+            PdfSignerGui.setStateLabel("Error during PDF signature verification: " + e.getMessage());
             return false;
         }
+    }
+
+    public static PublicKey readKeyFromFile(String publicKeyFilePath) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        if(publicKeyFilePath == null || publicKeyFilePath.isEmpty()){
+            return null;
+        }
+
+        byte[] encodedKeyBytes = Files.readAllBytes(Paths.get(publicKeyFilePath));
+        String encodedKeyString = new String(encodedKeyBytes);
+
+        byte[] decodedKey = Base64.getDecoder().decode(encodedKeyString);
+
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKey);
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+        return keyFactory.generatePublic(keySpec);
     }
 }
 

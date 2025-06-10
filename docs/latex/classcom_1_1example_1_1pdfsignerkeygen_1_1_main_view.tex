@@ -1,0 +1,85 @@
+\doxysection{com.\+example.\+pdfsignerkeygen.\+Main\+View Class Reference}
+\hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view}{}\label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view}\index{com.example.pdfsignerkeygen.MainView@{com.example.pdfsignerkeygen.MainView}}
+
+
+Main entry point for the PDF Signer Key Generator Java\+FX application.  
+
+
+Inheritance diagram for com.\+example.\+pdfsignerkeygen.\+Main\+View\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view_a402e4e3693fc57f9d215ab1d26fc1927}{start}} (Stage stage)  throws IOException 
+\begin{DoxyCompactList}\small\item\em The primary start method for the Java\+FX application. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view_af2f91fb67a16beb8857aaa37cf52eacd}{main}} (String\mbox{[}$\,$\mbox{]} args)
+\begin{DoxyCompactList}\small\item\em The main method to launch the Java\+FX application. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main entry point for the PDF Signer Key Generator Java\+FX application. 
+
+The {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view}{Main\+View}} class initializes and displays the user interface responsible for generating RSA keys and encrypting the private key for secure storage. It loads its UI components from the {\ttfamily main-\/view.\+fxml} file.
+
+\begin{DoxyAuthor}{Author}
+Your Name (You can replace this with your actual name) 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+
+
+\label{doc-func-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view_af2f91fb67a16beb8857aaa37cf52eacd}\index{com.example.pdfsignerkeygen.MainView@{com.example.pdfsignerkeygen.MainView}!main@{main}}
+\index{main@{main}!com.example.pdfsignerkeygen.MainView@{com.example.pdfsignerkeygen.MainView}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view_af2f91fb67a16beb8857aaa37cf52eacd} 
+void com.\+example.\+pdfsignerkeygen.\+Main\+View.\+main (\begin{DoxyParamCaption}\item[{String\mbox{[}$\,$\mbox{]}}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The main method to launch the Java\+FX application. 
+
+This is the standard entry point for any Java application. It calls {\ttfamily Application.\+launch()} to start the Java\+FX runtime and subsequently invoke the {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view_a402e4e3693fc57f9d215ab1d26fc1927}{start()}} method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & Command line arguments passed to the application. These are not explicitly used in this application. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view_a402e4e3693fc57f9d215ab1d26fc1927}\index{com.example.pdfsignerkeygen.MainView@{com.example.pdfsignerkeygen.MainView}!start@{start}}
+\index{start@{start}!com.example.pdfsignerkeygen.MainView@{com.example.pdfsignerkeygen.MainView}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_view_a402e4e3693fc57f9d215ab1d26fc1927} 
+void com.\+example.\+pdfsignerkeygen.\+Main\+View.\+start (\begin{DoxyParamCaption}\item[{Stage}]{stage}{}\end{DoxyParamCaption}) throws IOException}
+
+
+
+The primary start method for the Java\+FX application. 
+
+This method is automatically called by the Java\+FX runtime upon application launch. It loads the FXML layout for the main view, sets up the scene, and displays the primary stage. It also initializes the {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller}{Main\+Controller}} and starts a {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignerkeygen_1_1_drive_check}{Drive\+Check}} service to monitor for USB drives.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stage} & The primary {\ttfamily \doxylink{}{javafx.\+stage.\+Stage}} for this application, onto which the application\textquotesingle{}s scene is set. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em IOException} & If the {\ttfamily main-\/view.\+fxml} file cannot be loaded, indicating a problem with the UI resource. \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Pdf\+Signer\+Key\+Gen/src/main/java/com/example/pdfsignerkeygen/\mbox{\hyperlink{_main_view_8java}{Main\+View.\+java}}\end{DoxyCompactItemize}

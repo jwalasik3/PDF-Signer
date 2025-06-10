@@ -1,0 +1,282 @@
+\doxysection{com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt Class Reference}
+\hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt}{}\label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+
+
+Utility class for generating RSA key pairs and encrypting private keys.  
+
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_aa59b7685fce79ff2bffb56c7c7aa9347}{encode}} (String pin, String usb\+Path, String public\+Key\+Path)  throws Exception 
+\begin{DoxyCompactList}\small\item\em Generates an RSA key pair, encrypts the private key, and saves keys and a self-\/signed certificate to files. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static byte\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a5a3a32beaeb2d6ca699b43d159bc7441}{generate\+Salt}} ()
+\begin{DoxyCompactList}\small\item\em Generates a cryptographically strong random salt. \end{DoxyCompactList}\item 
+static Secret\+Key \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a953a4c4840aafe82d6746d41c8bbf680}{derive\+AESKey\+From\+PIN}} (String pin, byte\mbox{[}$\,$\mbox{]} salt)  throws Exception 
+\begin{DoxyCompactList}\small\item\em Derives an AES {\ttfamily Secret\+Key} from a PIN and a salt using PBKDF2. \end{DoxyCompactList}\item 
+static byte\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_abf95260505fbfbe764aba4721a46cff5}{encrypt\+Private\+Key}} (Private\+Key private\+Key, Secret\+Key aes\+Key)  throws Exception 
+\begin{DoxyCompactList}\small\item\em Encrypts a private key using AES encryption. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_afddb877b3ad234d2f38db9d683057e6a}{save\+To\+File}} (String path, byte\mbox{[}$\,$\mbox{]} salt, byte\mbox{[}$\,$\mbox{]} data)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Saves the salt and encrypted private key data to a file. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a933fb43a694cb56dc38f01c1731d944a}{save\+Public\+Key}} (String path, Public\+Key public\+Key)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Saves the public key to a file in Base64 encoded format. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a3f0dbd87bfa411c8d79a79530aa67292}{generate\+Self\+Signed\+Cert}} (Key\+Pair key\+Pair)  throws Exception 
+\begin{DoxyCompactList}\small\item\em Generates a self-\/signed X.\+509 certificate for the given key pair. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static final int \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a15579c0ea20fbb57c3a1936ff05fe665}{RSA\+\_\+\+KEY\+\_\+\+SIZE}} = 4096
+\begin{DoxyCompactList}\small\item\em The size of the RSA key in bits. \end{DoxyCompactList}\item 
+static final int \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a97b4d0095c27e3ce6e2738b36c718806}{AES\+\_\+\+KEY\+\_\+\+SIZE}} = 256
+\begin{DoxyCompactList}\small\item\em The size of the AES key in bits. \end{DoxyCompactList}\item 
+static final int \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_abfc7741160b9914b33ca60e8eabd9efa}{PBKDF2\+\_\+\+ITERATIONS}} = 65536
+\begin{DoxyCompactList}\small\item\em The number of iterations for PBKDF2 key derivation. A higher number increases the computational cost for brute-\/force attacks. \end{DoxyCompactList}\item 
+static final int \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a8b66ddf7f1b731a4a0dc0e95b52a796d}{SALT\+\_\+\+SIZE}} = 16
+\begin{DoxyCompactList}\small\item\em The size of the cryptographic salt in bytes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Utility class for generating RSA key pairs and encrypting private keys. 
+
+This class provides functionality to generate an RSA 4096-\/bit key pair, encrypt the private key using AES encryption with a PIN-\/derived key (PBKDF2), and save the encrypted private key and the public key (along with a self-\/signed X.\+509 certificate) to specified file paths. 
+
+\label{doc-func-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a953a4c4840aafe82d6746d41c8bbf680}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!deriveAESKeyFromPIN@{deriveAESKeyFromPIN}}
+\index{deriveAESKeyFromPIN@{deriveAESKeyFromPIN}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{deriveAESKeyFromPIN()}{deriveAESKeyFromPIN()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a953a4c4840aafe82d6746d41c8bbf680} 
+Secret\+Key com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+derive\+AESKey\+From\+PIN (\begin{DoxyParamCaption}\item[{String}]{pin}{, }\item[{byte\mbox{[}$\,$\mbox{]}}]{salt}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Derives an AES {\ttfamily Secret\+Key} from a PIN and a salt using PBKDF2. 
+
+This method uses PBKDF2 with Hmac\+SHA256 as the pseudo-\/random function to stretch the provided PIN into a strong cryptographic key. The number of iterations ({\ttfamily PBKDF2\+\_\+\+ITERATIONS}) makes the key derivation computationally expensive, hindering brute-\/force attacks on the PIN.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pin} & The user\textquotesingle{}s PIN as a String. \\
+\hline
+{\em salt} & The salt bytes used in the key derivation process. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A {\ttfamily \doxylink{}{javax.\+crypto.\+Secret\+Key}} object suitable for AES encryption. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If there is an issue with the cryptographic algorithms or factories. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_aa59b7685fce79ff2bffb56c7c7aa9347}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!encode@{encode}}
+\index{encode@{encode}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{encode()}{encode()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_aa59b7685fce79ff2bffb56c7c7aa9347} 
+void com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+encode (\begin{DoxyParamCaption}\item[{String}]{pin}{, }\item[{String}]{usb\+Path}{, }\item[{String}]{public\+Key\+Path}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generates an RSA key pair, encrypts the private key, and saves keys and a self-\/signed certificate to files. 
+
+This is the main entry point for the key generation and encryption process. It performs the following steps\+:
+\begin{DoxyEnumerate}
+\item Generates a 4096-\/bit RSA key pair.
+\item Generates a self-\/signed X.\+509 certificate using the generated key pair.
+\item Derives an AES encryption key from the provided PIN using PBKDF2 with a random salt.
+\item Encrypts the RSA private key using the derived AES key and a random IV.
+\item Saves the encrypted private key (along with the salt) to the specified USB path.
+\item Saves the RSA public key (Base64 encoded) to the specified public key path.
+\item Creates necessary parent directories if they don\textquotesingle{}t exist and attempts to set the private key file as hidden.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em pin} & The PIN (Personal Identification Number) used to derive the AES key for private key encryption. \\
+\hline
+{\em usb\+Path} & The path to the directory on the USB drive where the encrypted private key file will be saved. The file name will be {\ttfamily private\+\_\+key.\+enc} within this path. \\
+\hline
+{\em public\+Key\+Path} & The path to the directory where the public key file will be saved. The file name will be {\ttfamily public\+\_\+key.\+pem} within this path. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If any error occurs during key generation, encryption, certificate generation, or file operations. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_abf95260505fbfbe764aba4721a46cff5}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!encryptPrivateKey@{encryptPrivateKey}}
+\index{encryptPrivateKey@{encryptPrivateKey}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{encryptPrivateKey()}{encryptPrivateKey()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_abf95260505fbfbe764aba4721a46cff5} 
+byte\mbox{[}$\,$\mbox{]} com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+encrypt\+Private\+Key (\begin{DoxyParamCaption}\item[{Private\+Key}]{private\+Key}{, }\item[{Secret\+Key}]{aes\+Key}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Encrypts a private key using AES encryption. 
+
+This method takes a {\ttfamily \doxylink{}{java.\+security.\+Private\+Key}} and an AES {\ttfamily Secret\+Key} to encrypt the private key\textquotesingle{}s encoded bytes. It uses AES in CBC (Cipher Block Chaining) mode with PKCS5\+Padding. A random Initialization Vector (IV) is generated for each encryption and prepended to the encrypted data to ensure unique ciphertexts for identical plaintexts.
+
+
+\begin{DoxyParams}{Parameters}
+{\em private\+Key} & The {\ttfamily \doxylink{}{java.\+security.\+Private\+Key}} object to be encrypted. \\
+\hline
+{\em aes\+Key} & The {\ttfamily \doxylink{}{javax.\+crypto.\+Secret\+Key}} (AES key) used for encryption. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A byte array containing the IV followed by the encrypted private key data. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If there are issues with the cryptographic algorithms, padding, or the encryption process. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a5a3a32beaeb2d6ca699b43d159bc7441}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!generateSalt@{generateSalt}}
+\index{generateSalt@{generateSalt}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{generateSalt()}{generateSalt()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a5a3a32beaeb2d6ca699b43d159bc7441} 
+byte\mbox{[}$\,$\mbox{]} com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+generate\+Salt (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Generates a cryptographically strong random salt. 
+
+The salt is used in the PBKDF2 key derivation process to prevent rainbow table attacks and ensure that identical PINs produce different derived keys.
+
+\begin{DoxyReturn}{Returns}
+A byte array containing the randomly generated salt. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a3f0dbd87bfa411c8d79a79530aa67292}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!generateSelfSignedCert@{generateSelfSignedCert}}
+\index{generateSelfSignedCert@{generateSelfSignedCert}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{generateSelfSignedCert()}{generateSelfSignedCert()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a3f0dbd87bfa411c8d79a79530aa67292} 
+void com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+generate\+Self\+Signed\+Cert (\begin{DoxyParamCaption}\item[{Key\+Pair}]{key\+Pair}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Generates a self-\/signed X.\+509 certificate for the given key pair. 
+
+This method creates an X.\+509 version 3 certificate where the issuer and subject are the same. It sets basic constraints (not a CA), key usage for digital signatures, and includes Subject Key Identifier and Authority Key Identifier extensions. The certificate is signed using the provided private key and saved to a file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em key\+Pair} & The {\ttfamily \doxylink{}{java.\+security.\+Key\+Pair}} (containing both public and private keys) for which the self-\/signed certificate will be generated. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em No\+Such\+Algorithm\+Exception} & If the specified signature algorithm is not available. \\
+\hline
+{\em Operator\+Creation\+Exception} & If there\textquotesingle{}s an issue creating the content signer. \\
+\hline
+{\em Certificate\+Exception} & If there\textquotesingle{}s an issue with certificate creation or conversion. \\
+\hline
+{\em Cert\+IOException} & If there\textquotesingle{}s an I/O error during certificate extension processing. \\
+\hline
+{\em IOException} & If an I/O error occurs during saving the certificate to a file. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a933fb43a694cb56dc38f01c1731d944a}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!savePublicKey@{savePublicKey}}
+\index{savePublicKey@{savePublicKey}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{savePublicKey()}{savePublicKey()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a933fb43a694cb56dc38f01c1731d944a} 
+void com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+save\+Public\+Key (\begin{DoxyParamCaption}\item[{String}]{path}{, }\item[{Public\+Key}]{public\+Key}{}\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Saves the public key to a file in Base64 encoded format. 
+
+The public key\textquotesingle{}s encoded form (typically X.\+509 Subject\+Public\+Key\+Info) is Base64 encoded and then written directly to the specified file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & The full file path where the public key should be saved. \\
+\hline
+{\em public\+Key} & The {\ttfamily \doxylink{}{java.\+security.\+Public\+Key}} object to be saved. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em IOException} & If an I/O error occurs during file writing. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_afddb877b3ad234d2f38db9d683057e6a}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!saveToFile@{saveToFile}}
+\index{saveToFile@{saveToFile}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{saveToFile()}{saveToFile()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_afddb877b3ad234d2f38db9d683057e6a} 
+void com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+save\+To\+File (\begin{DoxyParamCaption}\item[{String}]{path}{, }\item[{byte\mbox{[}$\,$\mbox{]}}]{salt}{, }\item[{byte\mbox{[}$\,$\mbox{]}}]{data}{}\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Saves the salt and encrypted private key data to a file. 
+
+The salt is written first, followed by the encrypted private key data. This allows the decryption process to correctly extract the salt before deriving the AES key.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & The full file path where the data should be saved. \\
+\hline
+{\em salt} & The byte array containing the salt. \\
+\hline
+{\em data} & The byte array containing the encrypted private key data (including IV). \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em IOException} & If an I/O error occurs during file writing. \\
+\hline
+\end{DoxyExceptions}
+
+
+\label{doc-variable-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a97b4d0095c27e3ce6e2738b36c718806}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!AES\_KEY\_SIZE@{AES\_KEY\_SIZE}}
+\index{AES\_KEY\_SIZE@{AES\_KEY\_SIZE}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{AES\_KEY\_SIZE}{AES\_KEY\_SIZE}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a97b4d0095c27e3ce6e2738b36c718806} 
+final int com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+AES\+\_\+\+KEY\+\_\+\+SIZE = 256\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The size of the AES key in bits. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_abfc7741160b9914b33ca60e8eabd9efa}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!PBKDF2\_ITERATIONS@{PBKDF2\_ITERATIONS}}
+\index{PBKDF2\_ITERATIONS@{PBKDF2\_ITERATIONS}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{PBKDF2\_ITERATIONS}{PBKDF2\_ITERATIONS}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_abfc7741160b9914b33ca60e8eabd9efa} 
+final int com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+PBKDF2\+\_\+\+ITERATIONS = 65536\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The number of iterations for PBKDF2 key derivation. A higher number increases the computational cost for brute-\/force attacks. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a15579c0ea20fbb57c3a1936ff05fe665}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!RSA\_KEY\_SIZE@{RSA\_KEY\_SIZE}}
+\index{RSA\_KEY\_SIZE@{RSA\_KEY\_SIZE}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{RSA\_KEY\_SIZE}{RSA\_KEY\_SIZE}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a15579c0ea20fbb57c3a1936ff05fe665} 
+final int com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+RSA\+\_\+\+KEY\+\_\+\+SIZE = 4096\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The size of the RSA key in bits. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a8b66ddf7f1b731a4a0dc0e95b52a796d}\index{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}!SALT\_SIZE@{SALT\_SIZE}}
+\index{SALT\_SIZE@{SALT\_SIZE}!com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt@{com.example.pdfsignerkeygen.RSAKeyGenAndEncrypt}}
+\doxysubsubsection{\texorpdfstring{SALT\_SIZE}{SALT\_SIZE}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_a8b66ddf7f1b731a4a0dc0e95b52a796d} 
+final int com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt.\+SALT\+\_\+\+SIZE = 16\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The size of the cryptographic salt in bytes. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Pdf\+Signer\+Key\+Gen/src/main/java/com/example/pdfsignerkeygen/\mbox{\hyperlink{_r_s_a_key_gen_and_encrypt_8java}{RSAKey\+Gen\+And\+Encrypt.\+java}}\end{DoxyCompactItemize}

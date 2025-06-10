@@ -1,0 +1,39 @@
+\doxysection{Pdf\+Signer\+Key\+Gen/src/main/java/com/example/pdfsignerkeygen/\+RSAKey\+Gen\+And\+Encrypt.java File Reference}
+\hypertarget{_r_s_a_key_gen_and_encrypt_8java}{}\label{_r_s_a_key_gen_and_encrypt_8java}\index{PdfSignerKeyGen/src/main/java/com/example/pdfsignerkeygen/RSAKeyGenAndEncrypt.java@{PdfSignerKeyGen/src/main/java/com/example/pdfsignerkeygen/RSAKeyGenAndEncrypt.java}}
+{\ttfamily import org.\+bouncycastle.\+asn1.\+x500.\+X500\+Name;}\newline
+{\ttfamily import org.\+bouncycastle.\+asn1.\+x509.\+Basic\+Constraints;}\newline
+{\ttfamily import org.\+bouncycastle.\+asn1.\+x509.\+Extension;}\newline
+{\ttfamily import org.\+bouncycastle.\+asn1.\+x509.\+Key\+Usage;}\newline
+{\ttfamily import org.\+bouncycastle.\+cert.\+Cert\+IOException;}\newline
+{\ttfamily import org.\+bouncycastle.\+cert.\+X509v3\+Certificate\+Builder;}\newline
+{\ttfamily import org.\+bouncycastle.\+cert.\+jcajce.\+Jca\+X509\+Certificate\+Converter;}\newline
+{\ttfamily import org.\+bouncycastle.\+cert.\+jcajce.\+Jca\+X509\+Extension\+Utils;}\newline
+{\ttfamily import org.\+bouncycastle.\+cert.\+jcajce.\+Jca\+X509v3\+Certificate\+Builder;}\newline
+{\ttfamily import org.\+bouncycastle.\+operator.\+Content\+Signer;}\newline
+{\ttfamily import org.\+bouncycastle.\+operator.\+Operator\+Creation\+Exception;}\newline
+{\ttfamily import org.\+bouncycastle.\+operator.\+jcajce.\+Jca\+Content\+Signer\+Builder;}\newline
+{\ttfamily import org.\+bouncycastle.\+jce.\+provider.\+Bouncy\+Castle\+Provider;}\newline
+{\ttfamily import javax.\+crypto.\texorpdfstring{$\ast$}{*};}\newline
+{\ttfamily import javax.\+crypto.\+spec.\+Iv\+Parameter\+Spec;}\newline
+{\ttfamily import javax.\+crypto.\+spec.\+PBEKey\+Spec;}\newline
+{\ttfamily import javax.\+crypto.\+spec.\+Secret\+Key\+Spec;}\newline
+{\ttfamily import java.\+io.\texorpdfstring{$\ast$}{*};}\newline
+{\ttfamily import java.\+math.\+Big\+Integer;}\newline
+{\ttfamily import java.\+nio.\+file.\+Files;}\newline
+{\ttfamily import java.\+nio.\+file.\+Path;}\newline
+{\ttfamily import java.\+nio.\+file.\+Paths;}\newline
+{\ttfamily import java.\+security.\texorpdfstring{$\ast$}{*};}\newline
+{\ttfamily import java.\+security.\+cert.\+Certificate\+Exception;}\newline
+{\ttfamily import java.\+security.\+cert.\+X509\+Certificate;}\newline
+{\ttfamily import java.\+security.\+spec.\+PKCS8\+Encoded\+Key\+Spec;}\newline
+{\ttfamily import java.\+util.\texorpdfstring{$\ast$}{*};}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt}{com.\+example.\+pdfsignerkeygen.\+RSAKey\+Gen\+And\+Encrypt}}
+\begin{DoxyCompactList}\small\item\em Utility class for generating RSA key pairs and encrypting private keys. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Packages}
+\begin{DoxyCompactItemize}
+\item 
+package \mbox{\hyperlink{namespacecom_1_1example_1_1pdfsignerkeygen}{com.\+example.\+pdfsignerkeygen}}
+\end{DoxyCompactItemize}

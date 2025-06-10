@@ -1,0 +1,108 @@
+\doxysection{com.\+example.\+pdfsignergui.\+Drive\+Check Class Reference}
+\hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_drive_check}{}\label{classcom_1_1example_1_1pdfsignergui_1_1_drive_check}\index{com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}}
+
+
+Utility class for monitoring the presence of removable (USB) drives.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a61a6bf4774e87992ac1afdcd501a32d6}{start\+Drive\+Monitoring}} ()
+\begin{DoxyCompactList}\small\item\em Starts a background thread to continuously monitor for USB drives. \end{DoxyCompactList}\item 
+String \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_ac392e19067302f5c39be5672fb9d2d60}{get\+Usb\+File}} ()
+\begin{DoxyCompactList}\small\item\em Returns the {\ttfamily \doxylink{}{java.\+lang.\+String}} representation of the detected USB drive\textquotesingle{}s root path. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a5fbfb0705b991355562735861a941a14}{check\+For\+Drive}} ()  throws Exception 
+\begin{DoxyCompactList}\small\item\em Scans the system\textquotesingle{}s root directories to detect the presence of a removable drive. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+boolean \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_adf8dbb4cb70d6f01979f26fd37e48036}{is\+Detected}} = false
+\begin{DoxyCompactList}\small\item\em A boolean flag indicating whether a USB drive is currently detected. {\ttfamily true} if a USB drive is found, {\ttfamily false} otherwise. \end{DoxyCompactList}\item 
+File \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a73fef61a5348d49a98bc3893a945186d}{usb\+Drive}} = null
+\begin{DoxyCompactList}\small\item\em Stores the {\ttfamily \doxylink{}{java.\+io.\+File}} object representing the detected USB drive\textquotesingle{}s root directory. Null if no USB drive is currently detected. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Utility class for monitoring the presence of removable (USB) drives. 
+
+The {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignergui_1_1_drive_check}{Drive\+Check}} class provides functionality to periodically scan the system\textquotesingle{}s root directories to detect if a USB drive is connected. It keeps track of the detection status and the path to the detected USB drive. 
+
+\label{doc-func-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a5fbfb0705b991355562735861a941a14}\index{com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}!checkForDrive@{checkForDrive}}
+\index{checkForDrive@{checkForDrive}!com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}}
+\doxysubsubsection{\texorpdfstring{checkForDrive()}{checkForDrive()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a5fbfb0705b991355562735861a941a14} 
+void com.\+example.\+pdfsignergui.\+Drive\+Check.\+check\+For\+Drive (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Scans the system\textquotesingle{}s root directories to detect the presence of a removable drive. 
+
+This method iterates through all available file system roots, checks their type (e.\+g., FAT, ex\+FAT) and properties (readability, total space) to identify potential removable drives. It updates the {\ttfamily is\+Detected} flag and {\ttfamily usb\+Drive} field based on the scan results.
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If an unexpected error occurs during file system access. (Note\+: Expected inaccessible drive exceptions are caught internally). \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_ac392e19067302f5c39be5672fb9d2d60}\index{com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}!getUsbFile@{getUsbFile}}
+\index{getUsbFile@{getUsbFile}!com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}}
+\doxysubsubsection{\texorpdfstring{getUsbFile()}{getUsbFile()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_ac392e19067302f5c39be5672fb9d2d60} 
+String com.\+example.\+pdfsignergui.\+Drive\+Check.\+get\+Usb\+File (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Returns the {\ttfamily \doxylink{}{java.\+lang.\+String}} representation of the detected USB drive\textquotesingle{}s root path. 
+
+\begin{DoxyReturn}{Returns}
+The string representation of the {\ttfamily \doxylink{}{java.\+io.\+File}} object for the USB drive\textquotesingle{}s root, or {\ttfamily null} if no USB drive is currently detected. 
+\end{DoxyReturn}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a61a6bf4774e87992ac1afdcd501a32d6}\index{com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}!startDriveMonitoring@{startDriveMonitoring}}
+\index{startDriveMonitoring@{startDriveMonitoring}!com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}}
+\doxysubsubsection{\texorpdfstring{startDriveMonitoring()}{startDriveMonitoring()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a61a6bf4774e87992ac1afdcd501a32d6} 
+void com.\+example.\+pdfsignergui.\+Drive\+Check.\+start\+Drive\+Monitoring (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Starts a background thread to continuously monitor for USB drives. 
+
+This method initializes a {\ttfamily \doxylink{}{java.\+util.\+Timer}} and schedules a {\ttfamily \doxylink{}{java.\+util.\+Timer\+Task}} to execute the {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a5fbfb0705b991355562735861a941a14}{check\+For\+Drive()}} method periodically (every 2 seconds). The monitoring runs on a daemon thread, allowing the application to exit cleanly. The action to be performed by this timer task.
+
+This method is executed repeatedly by the timer and calls {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a5fbfb0705b991355562735861a941a14}{check\+For\+Drive()}} to check for USB drive presence. Exceptions during this check are ignored to ensure continuous monitoring.
+
+\label{doc-variable-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_adf8dbb4cb70d6f01979f26fd37e48036}\index{com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}!isDetected@{isDetected}}
+\index{isDetected@{isDetected}!com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}}
+\doxysubsubsection{\texorpdfstring{isDetected}{isDetected}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_adf8dbb4cb70d6f01979f26fd37e48036} 
+boolean com.\+example.\+pdfsignergui.\+Drive\+Check.\+is\+Detected = false\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+A boolean flag indicating whether a USB drive is currently detected. {\ttfamily true} if a USB drive is found, {\ttfamily false} otherwise. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a73fef61a5348d49a98bc3893a945186d}\index{com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}!usbDrive@{usbDrive}}
+\index{usbDrive@{usbDrive}!com.example.pdfsignergui.DriveCheck@{com.example.pdfsignergui.DriveCheck}}
+\doxysubsubsection{\texorpdfstring{usbDrive}{usbDrive}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_drive_check_a73fef61a5348d49a98bc3893a945186d} 
+File com.\+example.\+pdfsignergui.\+Drive\+Check.\+usb\+Drive = null\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Stores the {\ttfamily \doxylink{}{java.\+io.\+File}} object representing the detected USB drive\textquotesingle{}s root directory. Null if no USB drive is currently detected. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Pdf\+Signer\+GUI/src/main/java/com/example/pdfsignergui/\mbox{\hyperlink{_pdf_signer_g_u_i_2src_2main_2java_2com_2example_2pdfsignergui_2_drive_check_8java}{Drive\+Check.\+java}}\end{DoxyCompactItemize}

@@ -1,0 +1,158 @@
+\doxysection{com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui Class Reference}
+\hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui}{}\label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+
+
+Java\+FX application for signing and verifying PDF files. This application provides a graphical user interface for digital signature operations on PDF documents. It includes features to monitor for a USB drive containing a private key, allow users to select a PDF file, and then either sign the PDF or verify an existing signature.  
+
+
+Inheritance diagram for com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_adee6ad245c2a338bf2bc8548f6ebecb7}{start}} (Stage stage)  throws IOException 
+\begin{DoxyCompactList}\small\item\em The main entry point for the Java\+FX application. This method initializes the application\textquotesingle{}s user interface, sets up the primary stage, and starts the background monitoring for USB drives. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a75f89a787f814c04418f1307ed445280}{main}} (String\mbox{[}$\,$\mbox{]} args)
+\begin{DoxyCompactList}\small\item\em The main method that launches the Java\+FX application. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_abd38d022c238d2db9faf1b6523ea72da}{init\+App\+View}} (Stage stage)  throws IOException 
+\begin{DoxyCompactList}\small\item\em Initializes the main application view (GUI elements and their listeners). This private helper method loads the FXML layout, sets up the scene, and configures the various UI controls such as radio buttons for selecting modes, password fields, and action buttons for signing and verifying PDFs. It also defines listeners for UI element interactions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static Button \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a58a56a9f2745356c6a0d790a3ea2aa7e}{get\+Button}} (Stage stage)
+\begin{DoxyCompactList}\small\item\em Creates and configures a button for selecting a PDF file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Java\+FX application for signing and verifying PDF files. This application provides a graphical user interface for digital signature operations on PDF documents. It includes features to monitor for a USB drive containing a private key, allow users to select a PDF file, and then either sign the PDF or verify an existing signature. 
+
+\begin{DoxyAuthor}{Author}
+Jakub Walasik 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+
+
+\label{doc-func-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a58a56a9f2745356c6a0d790a3ea2aa7e}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!getButton@{getButton}}
+\index{getButton@{getButton}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+\doxysubsubsection{\texorpdfstring{getButton()}{getButton()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a58a56a9f2745356c6a0d790a3ea2aa7e} 
+Button com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui.\+get\+Button (\begin{DoxyParamCaption}\item[{Stage}]{stage}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+Creates and configures a button for selecting a PDF file. 
+
+This static helper method sets up a {\ttfamily \doxylink{}{javafx.\+stage.\+File\+Chooser}} to allow the user to browse and select a PDF file from their system. Upon selection, it updates the static {\ttfamily pdf\+File} variable and the {\ttfamily pdf\+Name} label in the GUI.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stage} & The primary {\ttfamily \doxylink{}{javafx.\+stage.\+Stage}} that owns the file chooser dialog. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Button}} instance configured to open a PDF file chooser. 
+\end{DoxyReturn}
+Event handler for the "{}\+Choose PDF File"{} button.
+
+Opens a file selection dialog. If a file is selected, it updates the {\ttfamily pdf\+File} static variable and the {\ttfamily pdf\+Name} label in the UI to reflect the chosen file\textquotesingle{}s name.\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_abd38d022c238d2db9faf1b6523ea72da}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!initAppView@{initAppView}}
+\index{initAppView@{initAppView}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+\doxysubsubsection{\texorpdfstring{initAppView()}{initAppView()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_abd38d022c238d2db9faf1b6523ea72da} 
+void com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui.\+init\+App\+View (\begin{DoxyParamCaption}\item[{Stage}]{stage}{}\end{DoxyParamCaption}) throws IOException\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Initializes the main application view (GUI elements and their listeners). This private helper method loads the FXML layout, sets up the scene, and configures the various UI controls such as radio buttons for selecting modes, password fields, and action buttons for signing and verifying PDFs. It also defines listeners for UI element interactions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stage} & The primary {\ttfamily \doxylink{}{javafx.\+stage.\+Stage}} where the UI elements will be displayed. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em IOException} & If the FXML file (main-\/view.\+fxml) cannot be loaded. \\
+\hline
+\end{DoxyExceptions}
+Defines the action to be performed when the "{}\+Sign PDF"{} button is clicked.
+
+This lambda expression checks for the presence of a USB drive and a selected PDF file, retrieves the PIN, and then calls {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a86972fb6578c8c6e0a46c742c6a933e7}{Pdf\+Signer\+Util\#sign\+Pdf}} to sign the document. Provides feedback to the console if conditions are not met (e.\+g., no USB, no PDF, no PIN).
+
+Defines the action to be performed when the "{}\+Verify PDF Signature"{} button is clicked.
+
+This lambda expression checks for a selected PDF file and then calls {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ab5b348446c74951d0b6d5210bdff8dcb}{Pdf\+Signer\+Util\#verify\+Signature}} to check the integrity and authenticity of the signature. Provides feedback to the console regarding the signature\textquotesingle{}s validity.
+
+Listener for changes in the selected radio button within the Toggle\+Group.
+
+This Change\+Listener manages the visibility of the PIN field, "{}\+Sign PDF"{} button, and "{}\+Verify PDF Signature"{} button based on the user\textquotesingle{}s selection (either "{}\+Sign a PDF"{} or "{}\+Verify a PDF Signature"{}).
+
+Called when the selected toggle in the {\ttfamily \doxylink{}{Toggle\+Group}} changes.
+
+Adjusts the visibility of UI elements based on whether the user wants to sign or verify a PDF.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ob} & The {\ttfamily \doxylink{}{Observable\+Value}} that changed (the Toggle\+Group\textquotesingle{}s selected\+Toggle\+Property). \\
+\hline
+{\em o} & The old (previously selected) Toggle. \\
+\hline
+{\em n} & The new (currently selected) Toggle.\\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a75f89a787f814c04418f1307ed445280}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!main@{main}}
+\index{main@{main}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a75f89a787f814c04418f1307ed445280} 
+void com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui.\+main (\begin{DoxyParamCaption}\item[{String\mbox{[}$\,$\mbox{]}}]{args}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The main method that launches the Java\+FX application. 
+
+This is the standard entry point for all Java\+FX applications.
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & Command line arguments passed to the application. Not directly used in this application. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_adee6ad245c2a338bf2bc8548f6ebecb7}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!start@{start}}
+\index{start@{start}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_adee6ad245c2a338bf2bc8548f6ebecb7} 
+void com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui.\+start (\begin{DoxyParamCaption}\item[{Stage}]{stage}{}\end{DoxyParamCaption}) throws IOException}
+
+
+
+The main entry point for the Java\+FX application. This method initializes the application\textquotesingle{}s user interface, sets up the primary stage, and starts the background monitoring for USB drives. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stage} & The primary {\ttfamily \doxylink{}{javafx.\+stage.\+Stage}} for this application, onto which the scene is set. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em IOException} & If the FXML file (main-\/view.\+fxml) cannot be loaded. \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Pdf\+Signer\+GUI/src/main/java/com/example/pdfsignergui/\mbox{\hyperlink{_pdf_signer_gui_8java}{Pdf\+Signer\+Gui.\+java}}\end{DoxyCompactItemize}

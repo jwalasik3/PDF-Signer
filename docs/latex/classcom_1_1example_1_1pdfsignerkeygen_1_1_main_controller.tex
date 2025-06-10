@@ -1,0 +1,122 @@
+\doxysection{com.\+example.\+pdfsignerkeygen.\+Main\+Controller Class Reference}
+\hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller}{}\label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller}\index{com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}}
+
+
+Controller class for the main-\/view.\+fxml.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_af31ec6f50f68192875ab632fc83ddc4c}{set\+Usb\+Path}} (String path)
+\begin{DoxyCompactList}\small\item\em Sets the text of the USB path text field. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a24ff99acb14f7e1967f6c689e60494ff}{generate\+Keys}} ()  throws Exception 
+\begin{DoxyCompactList}\small\item\em Handles the action triggered when the "{}\+Generate Keys"{} button is clicked. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Text\+Field \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a6a96bb1bdbb34a090a2b4f2bac924bbb}{pin\+Field}}
+\begin{DoxyCompactList}\small\item\em The {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Text\+Field}} for entering the PIN. This PIN is used to encrypt the private key. \end{DoxyCompactList}\item 
+Text\+Field \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_af1510e92987d26faf75c8a7848eb2bd6}{usb\+Path\+Field}}
+\begin{DoxyCompactList}\small\item\em The {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Text\+Field}} for displaying and setting the USB drive path. The encrypted private key will be saved to a {\ttfamily .keys} subdirectory on this path. \end{DoxyCompactList}\item 
+Text\+Field \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a7138859bf7085c53590e9c86feb18d11}{public\+Key\+Path\+Field}}
+\begin{DoxyCompactList}\small\item\em The {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Text\+Field}} for displaying and setting the public key path. The public key (and certificate) will be saved to this path. In the current implementation, it shares the path with the USB drive for consistency. \end{DoxyCompactList}\item 
+Label \mbox{\hyperlink{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a55b5aab368026cf6b7c95119f6dd77c1}{response\+Label}}
+\begin{DoxyCompactList}\small\item\em The {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Label}} used to display feedback messages to the user, such as success messages or error details after key generation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Controller class for the main-\/view.\+fxml. 
+
+This class handles user interactions within the key generation application. It manages the input fields for PIN, USB path, and public key path, and triggers the RSA key generation and private key encryption process using the {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt}{RSAKey\+Gen\+And\+Encrypt}} utility. It also updates the UI with feedback on the operation\textquotesingle{}s success or failure. 
+
+\label{doc-func-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a24ff99acb14f7e1967f6c689e60494ff}\index{com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}!generateKeys@{generateKeys}}
+\index{generateKeys@{generateKeys}!com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}}
+\doxysubsubsection{\texorpdfstring{generateKeys()}{generateKeys()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a24ff99acb14f7e1967f6c689e60494ff} 
+void com.\+example.\+pdfsignerkeygen.\+Main\+Controller.\+generate\+Keys (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Handles the action triggered when the "{}\+Generate Keys"{} button is clicked. 
+
+This method retrieves the PIN from {\ttfamily pin\+Field} and the USB path from {\ttfamily usb\+Path\+Field}. It then calls the static {\ttfamily encode} method of {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt}{RSAKey\+Gen\+And\+Encrypt}} to perform the key generation and encryption. It updates the {\ttfamily response\+Label} with the outcome of the operation.
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If an unhandled error occurs during the key generation or encryption process. (Note\+: Exceptions from {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignerkeygen_1_1_r_s_a_key_gen_and_encrypt_aa59b7685fce79ff2bffb56c7c7aa9347}{RSAKey\+Gen\+And\+Encrypt.\+encode}} are caught and displayed). \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_af31ec6f50f68192875ab632fc83ddc4c}\index{com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}!setUsbPath@{setUsbPath}}
+\index{setUsbPath@{setUsbPath}!com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}}
+\doxysubsubsection{\texorpdfstring{setUsbPath()}{setUsbPath()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_af31ec6f50f68192875ab632fc83ddc4c} 
+void com.\+example.\+pdfsignerkeygen.\+Main\+Controller.\+set\+Usb\+Path (\begin{DoxyParamCaption}\item[{String}]{path}{}\end{DoxyParamCaption})}
+
+
+
+Sets the text of the USB path text field. 
+
+This method is typically called by the {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignerkeygen_1_1_drive_check}{Drive\+Check}} service to update the UI with the detected USB drive\textquotesingle{}s path.
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & The string path of the detected USB drive. \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-variable-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a6a96bb1bdbb34a090a2b4f2bac924bbb}\index{com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}!pinField@{pinField}}
+\index{pinField@{pinField}!com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}}
+\doxysubsubsection{\texorpdfstring{pinField}{pinField}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a6a96bb1bdbb34a090a2b4f2bac924bbb} 
+Text\+Field com.\+example.\+pdfsignerkeygen.\+Main\+Controller.\+pin\+Field\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Text\+Field}} for entering the PIN. This PIN is used to encrypt the private key. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a7138859bf7085c53590e9c86feb18d11}\index{com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}!publicKeyPathField@{publicKeyPathField}}
+\index{publicKeyPathField@{publicKeyPathField}!com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}}
+\doxysubsubsection{\texorpdfstring{publicKeyPathField}{publicKeyPathField}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a7138859bf7085c53590e9c86feb18d11} 
+Text\+Field com.\+example.\+pdfsignerkeygen.\+Main\+Controller.\+public\+Key\+Path\+Field\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Text\+Field}} for displaying and setting the public key path. The public key (and certificate) will be saved to this path. In the current implementation, it shares the path with the USB drive for consistency. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a55b5aab368026cf6b7c95119f6dd77c1}\index{com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}!responseLabel@{responseLabel}}
+\index{responseLabel@{responseLabel}!com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}}
+\doxysubsubsection{\texorpdfstring{responseLabel}{responseLabel}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_a55b5aab368026cf6b7c95119f6dd77c1} 
+Label com.\+example.\+pdfsignerkeygen.\+Main\+Controller.\+response\+Label\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Label}} used to display feedback messages to the user, such as success messages or error details after key generation. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_af1510e92987d26faf75c8a7848eb2bd6}\index{com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}!usbPathField@{usbPathField}}
+\index{usbPathField@{usbPathField}!com.example.pdfsignerkeygen.MainController@{com.example.pdfsignerkeygen.MainController}}
+\doxysubsubsection{\texorpdfstring{usbPathField}{usbPathField}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignerkeygen_1_1_main_controller_af1510e92987d26faf75c8a7848eb2bd6} 
+Text\+Field com.\+example.\+pdfsignerkeygen.\+Main\+Controller.\+usb\+Path\+Field\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Text\+Field}} for displaying and setting the USB drive path. The encrypted private key will be saved to a {\ttfamily .keys} subdirectory on this path. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Pdf\+Signer\+Key\+Gen/src/main/java/com/example/pdfsignerkeygen/\mbox{\hyperlink{_pdf_signer_key_gen_2src_2main_2java_2com_2example_2pdfsignerkeygen_2_main_controller_8java}{Main\+Controller.\+java}}\end{DoxyCompactItemize}

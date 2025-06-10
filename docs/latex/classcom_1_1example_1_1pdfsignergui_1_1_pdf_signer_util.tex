@@ -1,0 +1,198 @@
+\doxysection{com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util Class Reference}
+\hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util}{}\label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+
+
+Utility class for signing and verifying PDF files.  
+
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a86972fb6578c8c6e0a46c742c6a933e7}{sign\+Pdf}} (File src\+Pdf\+Path, File dest\+Pdf\+Path, File usb\+Path, String pin)  throws Exception 
+\begin{DoxyCompactList}\small\item\em Digitally signs a PDF document using a private key and a certificate chain. \end{DoxyCompactList}\item 
+static Private\+Key \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a6fe375b18a336dbb7b40b66d9cf64235}{decrypt\+Private\+Key}} (File encrypted\+File, String pin)  throws Exception 
+\begin{DoxyCompactList}\small\item\em Decrypts a private key from an encrypted file using a provided PIN. \end{DoxyCompactList}\item 
+static Certificate\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_acfcd08c2b9aa0ae6f159cfdaa0d0b453}{load\+Certificate\+Chain}} ()  throws Exception 
+\begin{DoxyCompactList}\small\item\em Loads a certificate chain from the pre-\/defined certificate path ({\ttfamily CERT\+\_\+\+PATH}). \end{DoxyCompactList}\item 
+static boolean \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ab5b348446c74951d0b6d5210bdff8dcb}{verify\+Signature}} (File pdf\+Path)
+\begin{DoxyCompactList}\small\item\em Verifies the digital signatures present in a PDF document. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static final int \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a3838e1490dbe4418acf15b6dd651b2c5}{SALT\+\_\+\+SIZE}} = 16
+\begin{DoxyCompactList}\small\item\em The size of the salt used in key derivation (in bytes). \end{DoxyCompactList}\item 
+static final int \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a4238fda371d0dcaf0065d669bf4fa098}{IV\+\_\+\+SIZE}} = 16
+\begin{DoxyCompactList}\small\item\em The size of the Initialization Vector (IV) used in AES encryption (in bytes). \end{DoxyCompactList}\item 
+static final int \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a6bcc80d9390e67cf836d5a0328886f70}{PBKDF2\+\_\+\+ITERATIONS}} = 65536
+\begin{DoxyCompactList}\small\item\em The number of iterations for PBKDF2 key derivation. A higher number increases security but also computation time. \end{DoxyCompactList}\item 
+static final int \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a7abdae0ad90cd2b3532647e7688f765c}{AES\+\_\+\+KEY\+\_\+\+SIZE}} = 256
+\begin{DoxyCompactList}\small\item\em The size of the AES key in bits (256 bits for AES-\/256). \end{DoxyCompactList}\item 
+static final String \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_af53f2c92755bb18bfe0d11f9a434e953}{CERT\+\_\+\+PATH}} = "{}../Certs/cert\+\_\+for\+\_\+signing.\+cer"{}
+\begin{DoxyCompactList}\small\item\em The relative path to the certificate file used for signing and verification. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Utility class for signing and verifying PDF files. 
+
+The {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util}{Pdf\+Signer\+Util}} class provides static methods to handle the digital signing of PDF documents, decryption of private keys from encrypted files, and the verification of existing digital signatures within PDFs. It leverages the i\+Text library for PDF manipulation and signing, and Bouncy\+Castle for cryptographic operations. 
+
+\label{doc-func-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a6fe375b18a336dbb7b40b66d9cf64235}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!decryptPrivateKey@{decryptPrivateKey}}
+\index{decryptPrivateKey@{decryptPrivateKey}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{decryptPrivateKey()}{decryptPrivateKey()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a6fe375b18a336dbb7b40b66d9cf64235} 
+Private\+Key com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+decrypt\+Private\+Key (\begin{DoxyParamCaption}\item[{File}]{encrypted\+File}{, }\item[{String}]{pin}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Decrypts a private key from an encrypted file using a provided PIN. 
+
+This method reads the encrypted private key, salt, and Initialization Vector (IV) from the specified file. It then derives an AES key from the PIN using PBKDF2 and decrypts the private key data. Finally, it converts the decrypted bytes into an RSA {\ttfamily Private\+Key} object.
+
+
+\begin{DoxyParams}{Parameters}
+{\em encrypted\+File} & The {\ttfamily \doxylink{}{java.\+io.\+File}} containing the encrypted private key, salt, and IV. \\
+\hline
+{\em pin} & The PIN string used to derive the decryption key. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The decrypted {\ttfamily \doxylink{}{java.\+security.\+Private\+Key}} object. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If there are issues reading the file, deriving the key, decrypting the data, or converting the key bytes to a {\ttfamily Private\+Key} object. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_acfcd08c2b9aa0ae6f159cfdaa0d0b453}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!loadCertificateChain@{loadCertificateChain}}
+\index{loadCertificateChain@{loadCertificateChain}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{loadCertificateChain()}{loadCertificateChain()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_acfcd08c2b9aa0ae6f159cfdaa0d0b453} 
+Certificate\mbox{[}$\,$\mbox{]} com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+load\+Certificate\+Chain (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads a certificate chain from the pre-\/defined certificate path ({\ttfamily CERT\+\_\+\+PATH}). 
+
+This method attempts to read an X.\+509 certificate from the file specified by {\ttfamily CERT\+\_\+\+PATH}. This certificate is essential for both signing the PDF (as it contains the public key corresponding to the private key) and for verifying the signature.
+
+\begin{DoxyReturn}{Returns}
+An array of {\ttfamily \doxylink{}{java.\+security.\+cert.\+Certificate}} objects, containing the loaded X.\+509 certificate. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em File\+Not\+Found\+Exception} & If the certificate file specified by {\ttfamily CERT\+\_\+\+PATH} does not exist. \\
+\hline
+{\em Exception} & If any other error occurs during the certificate loading process (e.\+g., invalid certificate format). \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a86972fb6578c8c6e0a46c742c6a933e7}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!signPdf@{signPdf}}
+\index{signPdf@{signPdf}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{signPdf()}{signPdf()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a86972fb6578c8c6e0a46c742c6a933e7} 
+void com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+sign\+Pdf (\begin{DoxyParamCaption}\item[{File}]{src\+Pdf\+Path}{, }\item[{File}]{dest\+Pdf\+Path}{, }\item[{File}]{usb\+Path}{, }\item[{String}]{pin}{}\end{DoxyParamCaption}) throws Exception\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Digitally signs a PDF document using a private key and a certificate chain. 
+
+This method takes a source PDF file, decrypts a private key from an encrypted file on a USB drive using a provided PIN, and then applies a digital signature to the PDF. The signed PDF is saved to a specified destination path.
+
+
+\begin{DoxyParams}{Parameters}
+{\em src\+Pdf\+Path} & The {\ttfamily \doxylink{}{java.\+io.\+File}} object representing the source, unsigned PDF. \\
+\hline
+{\em dest\+Pdf\+Path} & The {\ttfamily \doxylink{}{java.\+io.\+File}} object where the signed PDF will be saved. \\
+\hline
+{\em usb\+Path} & The {\ttfamily \doxylink{}{java.\+io.\+File}} object pointing to the encrypted private key file on the USB. \\
+\hline
+{\em pin} & The PIN (Personal Identification Number) required to decrypt the private key. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If any error occurs during PDF reading/writing, key decryption, certificate loading, or the signing process itself. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ab5b348446c74951d0b6d5210bdff8dcb}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!verifySignature@{verifySignature}}
+\index{verifySignature@{verifySignature}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{verifySignature()}{verifySignature()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ab5b348446c74951d0b6d5210bdff8dcb} 
+boolean com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+verify\+Signature (\begin{DoxyParamCaption}\item[{File}]{pdf\+Path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Verifies the digital signatures present in a PDF document. 
+
+This method opens the specified PDF, iterates through all its form fields to find signature fields, and then verifies the integrity and authenticity of each signature using i\+Text\textquotesingle{}s {\ttfamily Pdf\+PKCS7} utility. It also compares the public key embedded in the signature with a locally loaded public key to ensure the signature was made by the expected entity.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pdf\+Path} & The {\ttfamily \doxylink{}{java.\+io.\+File}} object representing the PDF document to be verified. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if all found signatures are valid and match the locally provided public key; {\ttfamily false} otherwise, or if no signatures are found, or if an error occurs during the verification process. 
+\end{DoxyReturn}
+
+
+\label{doc-variable-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a7abdae0ad90cd2b3532647e7688f765c}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!AES\_KEY\_SIZE@{AES\_KEY\_SIZE}}
+\index{AES\_KEY\_SIZE@{AES\_KEY\_SIZE}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{AES\_KEY\_SIZE}{AES\_KEY\_SIZE}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a7abdae0ad90cd2b3532647e7688f765c} 
+final int com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+AES\+\_\+\+KEY\+\_\+\+SIZE = 256\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The size of the AES key in bits (256 bits for AES-\/256). 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_af53f2c92755bb18bfe0d11f9a434e953}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!CERT\_PATH@{CERT\_PATH}}
+\index{CERT\_PATH@{CERT\_PATH}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{CERT\_PATH}{CERT\_PATH}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_af53f2c92755bb18bfe0d11f9a434e953} 
+final String com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+CERT\+\_\+\+PATH = "{}../Certs/cert\+\_\+for\+\_\+signing.\+cer"{}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The relative path to the certificate file used for signing and verification. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a4238fda371d0dcaf0065d669bf4fa098}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!IV\_SIZE@{IV\_SIZE}}
+\index{IV\_SIZE@{IV\_SIZE}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{IV\_SIZE}{IV\_SIZE}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a4238fda371d0dcaf0065d669bf4fa098} 
+final int com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+IV\+\_\+\+SIZE = 16\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The size of the Initialization Vector (IV) used in AES encryption (in bytes). 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a6bcc80d9390e67cf836d5a0328886f70}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!PBKDF2\_ITERATIONS@{PBKDF2\_ITERATIONS}}
+\index{PBKDF2\_ITERATIONS@{PBKDF2\_ITERATIONS}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{PBKDF2\_ITERATIONS}{PBKDF2\_ITERATIONS}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a6bcc80d9390e67cf836d5a0328886f70} 
+final int com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+PBKDF2\+\_\+\+ITERATIONS = 65536\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The number of iterations for PBKDF2 key derivation. A higher number increases security but also computation time. 
+
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a3838e1490dbe4418acf15b6dd651b2c5}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!SALT\_SIZE@{SALT\_SIZE}}
+\index{SALT\_SIZE@{SALT\_SIZE}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{SALT\_SIZE}{SALT\_SIZE}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a3838e1490dbe4418acf15b6dd651b2c5} 
+final int com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+SALT\+\_\+\+SIZE = 16\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+
+
+The size of the salt used in key derivation (in bytes). 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Pdf\+Signer\+GUI/src/main/java/com/example/pdfsignergui/\mbox{\hyperlink{_pdf_signer_util_8java}{Pdf\+Signer\+Util.\+java}}\end{DoxyCompactItemize}

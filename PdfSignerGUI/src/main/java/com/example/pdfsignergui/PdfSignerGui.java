@@ -221,7 +221,7 @@ public class PdfSignerGui extends Application {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a PDF File");
         // Optionally, add file filters if you want to restrict file types
-        // fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
 
         Button choosePdf = new Button("Choose PDF File");
         /**

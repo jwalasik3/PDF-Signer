@@ -109,6 +109,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a9abdc6a222c19c81d713cdaa1235873b" id="r_a9abdc6a222c19c81d713cdaa1235873b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9abdc6a222c19c81d713cdaa1235873b">setStateLabel</a> (String string)</td></tr>
+<tr class="memitem:aff662175c111831a7fc16c97f91f3554" id="r_aff662175c111831a7fc16c97f91f3554"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff662175c111831a7fc16c97f91f3554">setUsbLabel</a> (String string)</td></tr>
 <tr class="memitem:a75f89a787f814c04418f1307ed445280" id="r_a75f89a787f814c04418f1307ed445280"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75f89a787f814c04418f1307ed445280">main</a> (String[] args)</td></tr>
 <tr class="memdesc:a75f89a787f814c04418f1307ed445280"><td class="mdescLeft">&#160;</td><td class="mdescRight">The main method that launches the JavaFX application.  <br /></td></tr>
 </table><table class="memberdecls">
@@ -121,6 +123,11 @@ Private Member Functions</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a58a56a9f2745356c6a0d790a3ea2aa7e" id="r_a58a56a9f2745356c6a0d790a3ea2aa7e"><td class="memItemLeft" align="right" valign="top">static Button&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58a56a9f2745356c6a0d790a3ea2aa7e">getButton</a> (Stage stage)</td></tr>
 <tr class="memdesc:a58a56a9f2745356c6a0d790a3ea2aa7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates and configures a button for selecting a PDF file.  <br /></td></tr>
+<tr class="memitem:a786275cfbc2a465cff94ab653ce5f764" id="r_a786275cfbc2a465cff94ab653ce5f764"><td class="memItemLeft" align="right" valign="top">static Button&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a786275cfbc2a465cff94ab653ce5f764">getPemButton</a> (Stage stage)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a6a973ffec57fa7a7918a2cc0300d1e40" id="r_a6a973ffec57fa7a7918a2cc0300d1e40"><td class="memItemLeft" align="right" valign="top">static Scene&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a973ffec57fa7a7918a2cc0300d1e40">scene</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>JavaFX application for signing and verifying PDF files. This application provides a graphical user interface for digital signature operations on PDF documents. It includes features to monitor for a USB drive containing a private key, allow users to select a PDF file, and then either sign the PDF or verify an existing signature. </p>
@@ -164,6 +171,31 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a786275cfbc2a465cff94ab653ce5f764" name="a786275cfbc2a465cff94ab653ce5f764"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a786275cfbc2a465cff94ab653ce5f764">&#9670;&#160;</a></span>getPemButton()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Button com.example.pdfsignergui.PdfSignerGui.getPemButton </td>
+          <td>(</td>
+          <td class="paramtype">Stage</td>          <td class="paramname"><span class="paramname"><em>stage</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abd38d022c238d2db9faf1b6523ea72da" name="abd38d022c238d2db9faf1b6523ea72da"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd38d022c238d2db9faf1b6523ea72da">&#9670;&#160;</a></span>initAppView()</h2>
 
@@ -203,7 +235,7 @@ Static Private Member Functions</h2></td></tr>
 <p>Defines the action to be performed when the "Sign PDF" button is clicked.</p>
 <p>This lambda expression checks for the presence of a USB drive and a selected PDF file, retrieves the PIN, and then calls <code><a class="el" href="classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util.html#a86972fb6578c8c6e0a46c742c6a933e7">PdfSignerUtil#signPdf</a></code> to sign the document. Provides feedback to the console if conditions are not met (e.g., no USB, no PDF, no PIN).</p>
 <p>Defines the action to be performed when the "Verify PDF Signature" button is clicked.</p>
-<p>This lambda expression checks for a selected PDF file and then calls <code><a class="el" href="classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util.html#ab5b348446c74951d0b6d5210bdff8dcb">PdfSignerUtil#verifySignature</a></code> to check the integrity and authenticity of the signature. Provides feedback to the console regarding the signature's validity.</p>
+<p>This lambda expression checks for a selected PDF file and then calls <code><a class="el" href="classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util.html#ac6742af388fdda21aae428be64edfdfc">PdfSignerUtil#verifySignature</a></code> to check the integrity and authenticity of the signature. Provides feedback to the console regarding the signature's validity.</p>
 <p>Listener for changes in the selected radio button within the ToggleGroup.</p>
 <p>This ChangeListener manages the visibility of the PIN field, "Sign PDF" button, and "Verify PDF Signature" button based on the user's selection (either "Sign a PDF" or "Verify a PDF Signature").</p>
 <p>Called when the selected toggle in the <code><a class="el" href="">ToggleGroup</a></code> changes.</p>
@@ -253,6 +285,56 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a9abdc6a222c19c81d713cdaa1235873b" name="a9abdc6a222c19c81d713cdaa1235873b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9abdc6a222c19c81d713cdaa1235873b">&#9670;&#160;</a></span>setStateLabel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void com.example.pdfsignergui.PdfSignerGui.setStateLabel </td>
+          <td>(</td>
+          <td class="paramtype">String</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aff662175c111831a7fc16c97f91f3554" name="aff662175c111831a7fc16c97f91f3554"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff662175c111831a7fc16c97f91f3554">&#9670;&#160;</a></span>setUsbLabel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void com.example.pdfsignergui.PdfSignerGui.setUsbLabel </td>
+          <td>(</td>
+          <td class="paramtype">String</td>          <td class="paramname"><span class="paramname"><em>string</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="adee6ad245c2a338bf2bc8548f6ebecb7" name="adee6ad245c2a338bf2bc8548f6ebecb7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adee6ad245c2a338bf2bc8548f6ebecb7">&#9670;&#160;</a></span>start()</h2>
 
@@ -281,6 +363,29 @@ Static Private Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a6a973ffec57fa7a7918a2cc0300d1e40" name="a6a973ffec57fa7a7918a2cc0300d1e40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a973ffec57fa7a7918a2cc0300d1e40">&#9670;&#160;</a></span>scene</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Scene com.example.pdfsignergui.PdfSignerGui.scene</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

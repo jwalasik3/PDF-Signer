@@ -19,6 +19,10 @@ void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_ade
 \doxysubsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a9abdc6a222c19c81d713cdaa1235873b}{set\+State\+Label}} (String string)
+\item 
+static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_aff662175c111831a7fc16c97f91f3554}{set\+Usb\+Label}} (String string)
+\item 
 static void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a75f89a787f814c04418f1307ed445280}{main}} (String\mbox{[}$\,$\mbox{]} args)
 \begin{DoxyCompactList}\small\item\em The main method that launches the Java\+FX application. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Private Member Functions}
@@ -30,7 +34,14 @@ void \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_abd
 \begin{DoxyCompactItemize}
 \item 
 static Button \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a58a56a9f2745356c6a0d790a3ea2aa7e}{get\+Button}} (Stage stage)
-\begin{DoxyCompactList}\small\item\em Creates and configures a button for selecting a PDF file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Creates and configures a button for selecting a PDF file. \end{DoxyCompactList}\item 
+static Button \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a786275cfbc2a465cff94ab653ce5f764}{get\+Pem\+Button}} (Stage stage)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static Scene \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a6a973ffec57fa7a7918a2cc0300d1e40}{scene}}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -69,7 +80,13 @@ A {\ttfamily \doxylink{}{javafx.\+scene.\+control.\+Button}} instance configured
 \end{DoxyReturn}
 Event handler for the "{}\+Choose PDF File"{} button.
 
-Opens a file selection dialog. If a file is selected, it updates the {\ttfamily pdf\+File} static variable and the {\ttfamily pdf\+Name} label in the UI to reflect the chosen file\textquotesingle{}s name.\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_abd38d022c238d2db9faf1b6523ea72da}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!initAppView@{initAppView}}
+Opens a file selection dialog. If a file is selected, it updates the {\ttfamily pdf\+File} static variable and the {\ttfamily pdf\+Name} label in the UI to reflect the chosen file\textquotesingle{}s name.\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a786275cfbc2a465cff94ab653ce5f764}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!getPemButton@{getPemButton}}
+\index{getPemButton@{getPemButton}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+\doxysubsubsection{\texorpdfstring{getPemButton()}{getPemButton()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a786275cfbc2a465cff94ab653ce5f764} 
+Button com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui.\+get\+Pem\+Button (\begin{DoxyParamCaption}\item[{Stage}]{stage}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_abd38d022c238d2db9faf1b6523ea72da}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!initAppView@{initAppView}}
 \index{initAppView@{initAppView}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
 \doxysubsubsection{\texorpdfstring{initAppView()}{initAppView()}}
 {\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_abd38d022c238d2db9faf1b6523ea72da} 
@@ -95,7 +112,7 @@ This lambda expression checks for the presence of a USB drive and a selected PDF
 
 Defines the action to be performed when the "{}\+Verify PDF Signature"{} button is clicked.
 
-This lambda expression checks for a selected PDF file and then calls {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ab5b348446c74951d0b6d5210bdff8dcb}{Pdf\+Signer\+Util\#verify\+Signature}} to check the integrity and authenticity of the signature. Provides feedback to the console regarding the signature\textquotesingle{}s validity.
+This lambda expression checks for a selected PDF file and then calls {\ttfamily \doxylink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ac6742af388fdda21aae428be64edfdfc}{Pdf\+Signer\+Util\#verify\+Signature}} to check the integrity and authenticity of the signature. Provides feedback to the console regarding the signature\textquotesingle{}s validity.
 
 Listener for changes in the selected radio button within the Toggle\+Group.
 
@@ -131,6 +148,18 @@ This is the standard entry point for all Java\+FX applications.
 {\em args} & Command line arguments passed to the application. Not directly used in this application. \\
 \hline
 \end{DoxyParams}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a9abdc6a222c19c81d713cdaa1235873b}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!setStateLabel@{setStateLabel}}
+\index{setStateLabel@{setStateLabel}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+\doxysubsubsection{\texorpdfstring{setStateLabel()}{setStateLabel()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a9abdc6a222c19c81d713cdaa1235873b} 
+void com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui.\+set\+State\+Label (\begin{DoxyParamCaption}\item[{String}]{string}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_aff662175c111831a7fc16c97f91f3554}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!setUsbLabel@{setUsbLabel}}
+\index{setUsbLabel@{setUsbLabel}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+\doxysubsubsection{\texorpdfstring{setUsbLabel()}{setUsbLabel()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_aff662175c111831a7fc16c97f91f3554} 
+void com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui.\+set\+Usb\+Label (\begin{DoxyParamCaption}\item[{String}]{string}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
 \Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_adee6ad245c2a338bf2bc8548f6ebecb7}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!start@{start}}
 \index{start@{start}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
 \doxysubsubsection{\texorpdfstring{start()}{start()}}
@@ -151,6 +180,17 @@ The main entry point for the Java\+FX application. This method initializes the a
 {\em IOException} & If the FXML file (main-\/view.\+fxml) cannot be loaded. \\
 \hline
 \end{DoxyExceptions}
+
+
+\label{doc-variable-members}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a6a973ffec57fa7a7918a2cc0300d1e40}\index{com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}!scene@{scene}}
+\index{scene@{scene}!com.example.pdfsignergui.PdfSignerGui@{com.example.pdfsignergui.PdfSignerGui}}
+\doxysubsubsection{\texorpdfstring{scene}{scene}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_gui_a6a973ffec57fa7a7918a2cc0300d1e40} 
+Scene com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Gui.\+scene\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

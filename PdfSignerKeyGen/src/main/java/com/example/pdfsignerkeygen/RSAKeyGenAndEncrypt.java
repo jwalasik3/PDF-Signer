@@ -97,7 +97,7 @@ public class RSAKeyGenAndEncrypt {
 
         byte[] encryptedPrivateKey = encryptPrivateKey(keyPair.getPrivate(), aesKey);
 
-        File usbFile = new File(usbPath, ".keys\\private_key.enc"); // Specific file name for private key
+        File usbFile = new File(usbPath, "private_key.enc"); // Specific file name for private key
         File parent = usbFile.getParentFile();
         if (parent != null && !parent.exists()) {
             parent.mkdirs();  // Creates parent directory if it doesn't exist

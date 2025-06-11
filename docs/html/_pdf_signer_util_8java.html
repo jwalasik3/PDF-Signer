@@ -108,15 +108,14 @@ $(function(){initNavTree('_pdf_signer_util_8java.html','',''); });
 <code>import javax.crypto.spec.SecretKeySpec;</code><br />
 <code>import java.io.*;</code><br />
 <code>import java.nio.file.Files;</code><br />
-<code>import java.security.KeyFactory;</code><br />
-<code>import java.security.PrivateKey;</code><br />
-<code>import java.security.Security;</code><br />
+<code>import java.nio.file.Paths;</code><br />
+<code>import java.security.*;</code><br />
 <code>import java.security.cert.Certificate;</code><br />
 <code>import java.security.cert.CertificateFactory;</code><br />
-<code>import java.security.cert.X509Certificate;</code><br />
+<code>import java.security.spec.InvalidKeySpecException;</code><br />
 <code>import java.security.spec.PKCS8EncodedKeySpec;</code><br />
-<code>import java.util.Calendar;</code><br />
-<code>import java.util.Collections;</code><br />
+<code>import java.security.spec.X509EncodedKeySpec;</code><br />
+<code>import java.util.Base64;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>

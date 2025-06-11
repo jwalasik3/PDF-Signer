@@ -14,8 +14,10 @@ static Private\+Key \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf
 \begin{DoxyCompactList}\small\item\em Decrypts a private key from an encrypted file using a provided PIN. \end{DoxyCompactList}\item 
 static Certificate\mbox{[}$\,$\mbox{]} \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_acfcd08c2b9aa0ae6f159cfdaa0d0b453}{load\+Certificate\+Chain}} ()  throws Exception 
 \begin{DoxyCompactList}\small\item\em Loads a certificate chain from the pre-\/defined certificate path ({\ttfamily CERT\+\_\+\+PATH}). \end{DoxyCompactList}\item 
-static boolean \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ab5b348446c74951d0b6d5210bdff8dcb}{verify\+Signature}} (File pdf\+Path)
-\begin{DoxyCompactList}\small\item\em Verifies the digital signatures present in a PDF document. \end{DoxyCompactList}\end{DoxyCompactItemize}
+static boolean \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ac6742af388fdda21aae428be64edfdfc}{verify\+Signature}} (File pdf\+Path, Public\+Key public\+Key)
+\begin{DoxyCompactList}\small\item\em Verifies the digital signatures present in a PDF document. \end{DoxyCompactList}\item 
+static Public\+Key \mbox{\hyperlink{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a7dc7c5818f07a62af30cf8286218c070}{read\+Key\+From\+File}} (String public\+Key\+File\+Path)  throws IOException, No\+Such\+Algorithm\+Exception, Invalid\+Key\+Spec\+Exception 
+\begin{DoxyCompactList}\small\item\em Reads a public key from a file. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsubsection*{Static Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -88,6 +90,33 @@ An array of {\ttfamily \doxylink{}{java.\+security.\+cert.\+Certificate}} object
 {\em Exception} & If any other error occurs during the certificate loading process (e.\+g., invalid certificate format). \\
 \hline
 \end{DoxyExceptions}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a7dc7c5818f07a62af30cf8286218c070}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!readKeyFromFile@{readKeyFromFile}}
+\index{readKeyFromFile@{readKeyFromFile}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
+\doxysubsubsection{\texorpdfstring{readKeyFromFile()}{readKeyFromFile()}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a7dc7c5818f07a62af30cf8286218c070} 
+Public\+Key com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+read\+Key\+From\+File (\begin{DoxyParamCaption}\item[{String}]{public\+Key\+File\+Path}{}\end{DoxyParamCaption}) throws IOException, No\+Such\+Algorithm\+Exception, Invalid\+Key\+Spec\+Exception\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Reads a public key from a file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em public\+Key\+File\+Path} & The path to the file containing the public key in Base64 format. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A {\ttfamily \doxylink{}{java.\+security.\+Public\+Key}} object representing the public key. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em IOException} & if there is an error reading the file. \\
+\hline
+{\em No\+Such\+Algorithm\+Exception} & if the RSA algorithm is not available. \\
+\hline
+{\em Invalid\+Key\+Spec\+Exception} & if the key specification is invalid. \\
+\hline
+\end{DoxyExceptions}
 \Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_a86972fb6578c8c6e0a46c742c6a933e7}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!signPdf@{signPdf}}
 \index{signPdf@{signPdf}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
 \doxysubsubsection{\texorpdfstring{signPdf()}{signPdf()}}
@@ -116,11 +145,11 @@ This method takes a source PDF file, decrypts a private key from an encrypted fi
 {\em Exception} & If any error occurs during PDF reading/writing, key decryption, certificate loading, or the signing process itself. \\
 \hline
 \end{DoxyExceptions}
-\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ab5b348446c74951d0b6d5210bdff8dcb}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!verifySignature@{verifySignature}}
+\Hypertarget{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ac6742af388fdda21aae428be64edfdfc}\index{com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}!verifySignature@{verifySignature}}
 \index{verifySignature@{verifySignature}!com.example.pdfsignergui.PdfSignerUtil@{com.example.pdfsignergui.PdfSignerUtil}}
 \doxysubsubsection{\texorpdfstring{verifySignature()}{verifySignature()}}
-{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ab5b348446c74951d0b6d5210bdff8dcb} 
-boolean com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+verify\+Signature (\begin{DoxyParamCaption}\item[{File}]{pdf\+Path}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily \label{classcom_1_1example_1_1pdfsignergui_1_1_pdf_signer_util_ac6742af388fdda21aae428be64edfdfc} 
+boolean com.\+example.\+pdfsignergui.\+Pdf\+Signer\+Util.\+verify\+Signature (\begin{DoxyParamCaption}\item[{File}]{pdf\+Path}{, }\item[{Public\+Key}]{public\+Key}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 

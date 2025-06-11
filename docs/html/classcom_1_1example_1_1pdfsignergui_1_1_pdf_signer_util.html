@@ -104,8 +104,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a6fe375b18a336dbb7b40b66d9cf64235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decrypts a private key from an encrypted file using a provided PIN.  <br /></td></tr>
 <tr class="memitem:acfcd08c2b9aa0ae6f159cfdaa0d0b453" id="r_acfcd08c2b9aa0ae6f159cfdaa0d0b453"><td class="memItemLeft" align="right" valign="top">static Certificate[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfcd08c2b9aa0ae6f159cfdaa0d0b453">loadCertificateChain</a> ()  throws Exception </td></tr>
 <tr class="memdesc:acfcd08c2b9aa0ae6f159cfdaa0d0b453"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a certificate chain from the pre-defined certificate path (<span class="tt">CERT_PATH</span>).  <br /></td></tr>
-<tr class="memitem:ab5b348446c74951d0b6d5210bdff8dcb" id="r_ab5b348446c74951d0b6d5210bdff8dcb"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5b348446c74951d0b6d5210bdff8dcb">verifySignature</a> (File pdfPath)</td></tr>
-<tr class="memdesc:ab5b348446c74951d0b6d5210bdff8dcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies the digital signatures present in a PDF document.  <br /></td></tr>
+<tr class="memitem:ac6742af388fdda21aae428be64edfdfc" id="r_ac6742af388fdda21aae428be64edfdfc"><td class="memItemLeft" align="right" valign="top">static boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6742af388fdda21aae428be64edfdfc">verifySignature</a> (File pdfPath, PublicKey publicKey)</td></tr>
+<tr class="memdesc:ac6742af388fdda21aae428be64edfdfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verifies the digital signatures present in a PDF document.  <br /></td></tr>
+<tr class="memitem:a7dc7c5818f07a62af30cf8286218c070" id="r_a7dc7c5818f07a62af30cf8286218c070"><td class="memItemLeft" align="right" valign="top">static PublicKey&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dc7c5818f07a62af30cf8286218c070">readKeyFromFile</a> (String publicKeyFilePath)  throws IOException, NoSuchAlgorithmException, InvalidKeySpecException </td></tr>
+<tr class="memdesc:a7dc7c5818f07a62af30cf8286218c070"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a public key from a file.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -206,6 +208,48 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7dc7c5818f07a62af30cf8286218c070" name="a7dc7c5818f07a62af30cf8286218c070"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dc7c5818f07a62af30cf8286218c070">&#9670;&#160;</a></span>readKeyFromFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">PublicKey com.example.pdfsignergui.PdfSignerUtil.readKeyFromFile </td>
+          <td>(</td>
+          <td class="paramtype">String</td>          <td class="paramname"><span class="paramname"><em>publicKeyFilePath</em></span></td><td>)</td>
+          <td> throws IOException, NoSuchAlgorithmException, InvalidKeySpecException</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads a public key from a file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">publicKeyFilePath</td><td>The path to the file containing the public key in Base64 format. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A <code><a class="el" href="">java.security.PublicKey</a></code> object representing the public key. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">IOException</td><td>if there is an error reading the file. </td></tr>
+    <tr><td class="paramname">NoSuchAlgorithmException</td><td>if the RSA algorithm is not available. </td></tr>
+    <tr><td class="paramname">InvalidKeySpecException</td><td>if the key specification is invalid. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a86972fb6578c8c6e0a46c742c6a933e7" name="a86972fb6578c8c6e0a46c742c6a933e7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86972fb6578c8c6e0a46c742c6a933e7">&#9670;&#160;</a></span>signPdf()</h2>
 
@@ -263,8 +307,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab5b348446c74951d0b6d5210bdff8dcb" name="ab5b348446c74951d0b6d5210bdff8dcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab5b348446c74951d0b6d5210bdff8dcb">&#9670;&#160;</a></span>verifySignature()</h2>
+<a id="ac6742af388fdda21aae428be64edfdfc" name="ac6742af388fdda21aae428be64edfdfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6742af388fdda21aae428be64edfdfc">&#9670;&#160;</a></span>verifySignature()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -275,8 +319,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">boolean com.example.pdfsignergui.PdfSignerUtil.verifySignature </td>
           <td>(</td>
-          <td class="paramtype">File</td>          <td class="paramname"><span class="paramname"><em>pdfPath</em></span></td><td>)</td>
+          <td class="paramtype">File</td>          <td class="paramname"><span class="paramname"><em>pdfPath</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">PublicKey</td>          <td class="paramname"><span class="paramname"><em>publicKey</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

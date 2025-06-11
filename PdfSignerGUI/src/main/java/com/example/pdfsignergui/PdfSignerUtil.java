@@ -8,8 +8,6 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.StampingProperties;
 import com.itextpdf.signatures.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.io.pem.PemObject;
-import org.bouncycastle.util.io.pem.PemReader;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -23,13 +21,10 @@ import java.nio.file.Paths;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.Calendar;
-import java.util.Collections;
 
 /**
  * @brief Utility class for signing and verifying PDF files.
@@ -78,7 +73,13 @@ public class PdfSignerUtil {
      * certificate loading, or the signing process itself.
      */
     public static void signPdf(File srcPdfPath, File destPdfPath, File usbPath, String pin) throws Exception {
-        PrivateKey privateKey = decryptPrivateKey(usbPath, pin);
+        PrivateKey privateKey;
+        try {
+            privateKey = decryptPrivateKey(usbPath, pin);
+        } catch (Exception e) {
+            PdfSignerGui.setStateLabel("Error decrypting private key. Check your PIN");
+            return;
+        }
         Certificate[] chain = loadCertificateChain();
 
         System.out.println("Signing...");
@@ -238,16 +239,22 @@ public class PdfSignerUtil {
                     return false;
                 }
             }
-            pdfDoc.close(); // Close the document after successful verification
-            return true; // All signatures verified successfully.
+            pdfDoc.close();
+            return true;
         } catch (Exception e) {
-            // Log any errors that occur during the verification process.
-            System.out.println("Error during PDF signature verification: " + e.getMessage());
-            PdfSignerGui.setStateLabel("Error during PDF signature verification: " + e.getMessage());
+            PdfSignerGui.setStateLabel("Signature is invalid.");
             return false;
         }
     }
 
+    /**
+     * @brief Reads a public key from a file.
+     * @param publicKeyFilePath The path to the file containing the public key in Base64 format.
+     * @return A {@link java.security.PublicKey} object representing the public key.
+     * @throws IOException if there is an error reading the file.
+     * @throws NoSuchAlgorithmException if the RSA algorithm is not available.
+     * @throws InvalidKeySpecException if the key specification is invalid.
+     */
     public static PublicKey readKeyFromFile(String publicKeyFilePath) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
         if(publicKeyFilePath == null || publicKeyFilePath.isEmpty()){
             return null;

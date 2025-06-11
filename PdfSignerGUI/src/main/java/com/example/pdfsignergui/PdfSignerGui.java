@@ -66,7 +66,7 @@ public class PdfSignerGui extends Application {
      */
     private void initAppView(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(PdfSignerGui.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        Scene scene = new Scene(fxmlLoader.load(), 760, 500);
         stage.setTitle("PDF Signature Tool");
         stage.setScene(scene);
         VBox root = (VBox) scene.getRoot();

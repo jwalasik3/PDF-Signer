@@ -1,10 +1,6 @@
 package com.example.pdfsignerkeygen;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;

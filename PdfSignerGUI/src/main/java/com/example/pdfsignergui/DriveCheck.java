@@ -1,5 +1,7 @@
 package com.example.pdfsignergui;
 
+import javafx.application.Platform;
+
 import java.io.File;
 import java.nio.file.FileStore;
 import java.nio.file.FileSystems;
@@ -54,7 +56,7 @@ public class DriveCheck {
                 if (isRemovable && rootFile.canRead() && rootFile.getTotalSpace() > 0) {
                     usbDrive = rootFile;
                     found = true;
-                    break; // Found a suitable drive, no need to check further
+                    break;
                 }
 
             } catch (Exception e){
@@ -66,13 +68,11 @@ public class DriveCheck {
         // Update detection status based on current scan result
         if (found && !isDetected) {
             isDetected = true;
-            // Optionally, log that a USB drive was just detected
-            // System.out.println("USB drive detected at: " + usbDrive.getAbsolutePath());
+            Platform.runLater(() ->  PdfSignerGui.setUsbLabel("Hardware key detected: " + usbDrive));
         } else if (!found && isDetected) {
             isDetected = false;
             usbDrive = null;
-            // Optionally, log that a USB drive was just removed
-            // System.out.println("USB drive removed.");
+            Platform.runLater(() ->  PdfSignerGui.setUsbLabel("Hardware key not connected."));
         }
     }
 
@@ -98,11 +98,10 @@ public class DriveCheck {
                 try {
                     checkForDrive();
                 } catch (Exception e) {
-                    // @brief Ignoring exceptions that might occur during drive check,
-                    // to prevent interruption of the monitoring process.
+                    // Ignore exceptions for inaccessible drives
                 }
             }
-        }, 0, 2000); // Start immediately, repeat every 2000 milliseconds (2 seconds)
+        }, 0, 2000);
     }
 
     /**
@@ -112,8 +111,9 @@ public class DriveCheck {
      * or `null` if no USB drive is currently detected.
      */
     public String getUsbFile(){
-        // Note: Returning usbDrive.toString() might throw NullPointerException if usbDrive is null.
-        // It's safer to check for null or return null directly if no drive is found.
-        return (usbDrive != null) ? usbDrive.toString() : null;
+        if (usbDrive != null) {
+            return usbDrive.toString();
+        }
+        return null;
     }
 }

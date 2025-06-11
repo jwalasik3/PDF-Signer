@@ -8,6 +8,8 @@ import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.StampingProperties;
 import com.itextpdf.signatures.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemReader;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -17,13 +19,17 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.file.Files;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.Security;
+import java.nio.file.Paths;
+import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+import java.util.Calendar;
+import java.util.Collections;
 
 /**
  * @brief Utility class for signing and verifying PDF files.
@@ -76,25 +82,26 @@ public class PdfSignerUtil {
         Certificate[] chain = loadCertificateChain();
 
         System.out.println("Signing...");
+        PdfSignerGui.setStateLabel("Signing...");
         PdfSigner signer = new PdfSigner(new PdfReader(srcPdfPath), new FileOutputStream(destPdfPath), new StampingProperties());
 
         PdfSignatureAppearance appearance = signer.getSignatureAppearance();
         appearance
-                .setReason("Proj") // Sets the reason for signing.
-                .setLocation("localhost") // Sets the location where the document was signed.
-                .setReuseAppearance(false) // Ensures a new appearance is generated for the signature field.
-                .setPageNumber(1); // Specifies the page number where the signature will appear.
-        signer.setFieldName("sig"); // Sets the name of the signature form field.
+                .setReason("Proj")
+                .setLocation("localhost")
+                .setReuseAppearance(false)
+                .setPageNumber(1);
+        signer.setFieldName("sig");
 
         BouncyCastleProvider provider = new BouncyCastleProvider();
-        Security.addProvider(provider); // Adds the BouncyCastle security provider.
+        Security.addProvider(provider);
 
         IExternalSignature signature = new PrivateKeySignature(privateKey, DigestAlgorithms.SHA256, provider.getName());
         IExternalDigest digest = new BouncyCastleDigest();
 
-        // Signs the PDF document detached (signature data is external to the signed data).
         signer.signDetached(digest, signature, chain, null, null, null, 0, PdfSigner.CryptoStandard.CADES);
         System.out.println("Signed.");
+        PdfSignerGui.setStateLabel("Pdf Signed.");
     }
 
     /**
@@ -114,7 +121,7 @@ public class PdfSignerUtil {
     public static PrivateKey decryptPrivateKey(File encryptedFile, String pin) throws Exception {
         byte[] fileBytes = Files.readAllBytes(encryptedFile.toPath());
 
-        // Extract salt and IV from the beginning of the file bytes
+        // Extract salt and IV
         byte[] salt = new byte[SALT_SIZE];
         byte[] iv = new byte[IV_SIZE];
         byte[] encryptedKeyBytes = new byte[fileBytes.length - SALT_SIZE - IV_SIZE];
@@ -123,18 +130,18 @@ public class PdfSignerUtil {
         System.arraycopy(fileBytes, SALT_SIZE, iv, 0, IV_SIZE);
         System.arraycopy(fileBytes, SALT_SIZE + IV_SIZE, encryptedKeyBytes, 0, encryptedKeyBytes.length);
 
-        // Derive AES key from PIN using PBKDF2WithHmacSHA256
+        // Derive AES key from PIN
         PBEKeySpec spec = new PBEKeySpec(pin.toCharArray(), salt, PBKDF2_ITERATIONS, AES_KEY_SIZE);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         SecretKey tmpKey = factory.generateSecret(spec);
         SecretKey aesKey = new SecretKeySpec(tmpKey.getEncoded(), "AES");
 
-        // Decrypt the key using AES/CBC/PKCS5Padding
+        // Decrypt the key
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, aesKey, new IvParameterSpec(iv));
         byte[] decryptedKeyBytes = cipher.doFinal(encryptedKeyBytes);
 
-        // Convert the decrypted bytes into an RSA PrivateKey object
+        // Convert to RSA PrivateKey
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decryptedKeyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         return keyFactory.generatePrivate(keySpec);
@@ -181,9 +188,9 @@ public class PdfSignerUtil {
      * provided public key; `false` otherwise, or if no signatures are found,
      * or if an error occurs during the verification process.
      */
-    public static boolean verifySignature(File pdfPath) {
+    public static boolean verifySignature(File pdfPath, PublicKey publicKey) {
         BouncyCastleProvider provider = new BouncyCastleProvider();
-        Security.addProvider(provider); // Ensures BouncyCastle is available for cryptographic operations.
+        Security.addProvider(provider);
         try {
             PdfDocument pdfDoc = new PdfDocument(new PdfReader(pdfPath));
             PdfAcroForm acroForm = PdfAcroForm.getAcroForm(pdfDoc, false);
@@ -191,38 +198,43 @@ public class PdfSignerUtil {
             // Check if the PDF has any form fields, if not, no signatures can be present.
             if (acroForm == null || acroForm.getFormFields().isEmpty()) {
                 System.out.println("No signatures found in the PDF.");
+                PdfSignerGui.setStateLabel("No signatures found in the PDF.");
                 pdfDoc.close(); // Close the document to release resources
                 return false;
             }
 
-            // Load the expected signing certificate for public key comparison.
-            Certificate[] chain = loadCertificateChain();
-            X509Certificate signingCert = (X509Certificate) chain[0];
-
             SignatureUtil signatureUtil = new SignatureUtil(pdfDoc);
-            // Iterate through all form fields to find signature fields.
             for (String name : acroForm.getFormFields().keySet()) {
                 PdfFormField field = acroForm.getField(name);
-                // Skip fields that are not signature fields.
                 if (!PdfName.Sig.equals(field.getFormType())) {
                     continue;
                 }
 
-                // Read signature data and perform integrity and authenticity checks.
                 PdfPKCS7 pkcs7 = signatureUtil.readSignatureData(name);
+                System.out.println("Checking signature integrity...");
+                PdfSignerGui.setStateLabel("Checking signature integrity...");
+
                 if (pkcs7.verifySignatureIntegrityAndAuthenticity()) {
                     System.out.println("Signature " + name + " is valid.");
-                    // Compare the public key from the signature's certificate with the expected public key.
-                    if (pkcs7.getSigningCertificate().getPublicKey().equals(signingCert.getPublicKey())) {
+                    PdfSignerGui.setStateLabel("Signature " + name + " is valid.");
+
+                    if(publicKey == null){
+                        PdfSignerGui.setStateLabel("No public key given.");
+                        return false;
+                    }
+                    if (pkcs7.getSigningCertificate().getPublicKey().equals(publicKey)) {
                         System.out.println("Signature matches the public key.");
+                        PdfSignerGui.setStateLabel("Signature matches the public key.");
                     } else {
                         System.out.println("Signature does not match the public key.");
-                        pdfDoc.close(); // Close the document
+                        PdfSignerGui.setStateLabel("Signature does not match the public key.");
+                        pdfDoc.close();
                         return false;
                     }
                 } else {
                     System.out.println("Signature " + name + " is invalid.");
-                    pdfDoc.close(); // Close the document
+                    PdfSignerGui.setStateLabel("Signature " + name + " is invalid.");
+                    pdfDoc.close();
                     return false;
                 }
             }
@@ -231,7 +243,26 @@ public class PdfSignerUtil {
         } catch (Exception e) {
             // Log any errors that occur during the verification process.
             System.out.println("Error during PDF signature verification: " + e.getMessage());
+            PdfSignerGui.setStateLabel("Error during PDF signature verification: " + e.getMessage());
             return false;
         }
     }
+
+    public static PublicKey readKeyFromFile(String publicKeyFilePath) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+        if(publicKeyFilePath == null || publicKeyFilePath.isEmpty()){
+            return null;
+        }
+
+        byte[] encodedKeyBytes = Files.readAllBytes(Paths.get(publicKeyFilePath));
+        String encodedKeyString = new String(encodedKeyBytes);
+
+        byte[] decodedKey = Base64.getDecoder().decode(encodedKeyString);
+
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKey);
+
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+        return keyFactory.generatePublic(keySpec);
+    }
 }
+

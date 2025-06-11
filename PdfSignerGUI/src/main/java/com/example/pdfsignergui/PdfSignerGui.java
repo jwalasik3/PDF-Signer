@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class PdfSignerGui extends Application {
      * @brief An instance of DriveCheck to monitor USB drive presence.
      */
     DriveCheck checker;
+    private static Scene scene;
     /**
      * @brief Stores the path to the private key file on the USB drive.
      * Initialized when a USB drive is detected and a signing operation is requested.
@@ -36,6 +38,11 @@ public class PdfSignerGui extends Application {
      * This file is used for both signing and verification operations.
      */
     static File pdfFile = null;
+    /**
+     * @brief Stores the public key selected by the user.
+     * It is used for PDF signature authentication.
+     */
+    static File pubKeyFile = null;
 
     /**
      * @brief The main entry point for the JavaFX application.
@@ -66,7 +73,7 @@ public class PdfSignerGui extends Application {
      */
     private void initAppView(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(PdfSignerGui.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 760, 500);
+        scene = new Scene(fxmlLoader.load(), 600, 600);
         stage.setTitle("PDF Signature Tool");
         stage.setScene(scene);
         VBox root = (VBox) scene.getRoot();
@@ -77,6 +84,10 @@ public class PdfSignerGui extends Application {
         ToggleGroup toggleGroup = new ToggleGroup();
         signPdfRadio.setToggleGroup(toggleGroup);
         verifyPdfRadio.setToggleGroup(toggleGroup);
+
+        Label usbLabel = new Label("Hardware key not connected.");
+        usbLabel.setId("usbLabel");
+        usbLabel.setVisible(false);
 
         PasswordField pinField = new PasswordField();
         pinField.setPromptText("Pin");
@@ -97,14 +108,14 @@ public class PdfSignerGui extends Application {
                 usbPath = new File(checker.getUsbFile(), ".keys\\private_key.enc");
 
                 // Check for pin
-                if (pinField.getText() == null || pinField.getText().isEmpty()) { // Added isEmpty() check
-                    System.out.println("Pin not provided.");
+                if (pinField.getText() == null || pinField.getText().isEmpty()) {
+                    PdfSignerGui.setStateLabel("Pin not provided.");
                     return;
                 }
 
                 // Checking for PDF file
                 if (pdfFile == null) {
-                    System.out.println("No PDF selected.");
+                    PdfSignerGui.setStateLabel("No PDF selected.");
                     return;
                 }
 
@@ -113,16 +124,12 @@ public class PdfSignerGui extends Application {
                 // Signing the PDF file
                 try {
                     PdfSignerUtil.signPdf(pdfFile, destPdfFile, usbPath, pinField.getText());
-                    System.out.println("PDF signed successfully: " + destPdfFile.getAbsolutePath()); // Added success message
                 } catch (Exception e) {
-                    System.err.println("Error signing PDF: " + e.getMessage()); // Use err for errors
-                    // Optionally, show an alert to the user
-                    // new Alert(Alert.AlertType.ERROR, "Error signing PDF: " + e.getMessage()).showAndWait();
-                    throw new RuntimeException("Failed to sign PDF", e); // Re-throw with more context
+                    throw new RuntimeException(e);
                 }
 
             } else {
-                System.out.println("No USB drive found.");
+                PdfSignerGui.setStateLabel("No USB drive found.");
             }
 
         });
@@ -138,29 +145,36 @@ public class PdfSignerGui extends Application {
          */
         verifyButton.setOnAction(event -> {
             if (pdfFile == null) {
-                System.out.println("No PDF selected.");
+                PdfSignerGui.setStateLabel("No PDF selected.");
                 return;
             }
 
             try {
-                System.out.println("Verifying PDF signature...");
-                boolean isValid = PdfSignerUtil.verifySignature(pdfFile);
-                if (isValid) {
-                    System.out.println("The PDF signature is valid.");
+                if (pubKeyFile == null){
+                    PdfSignerGui.setStateLabel("No Public Key provided.");
                 } else {
-                    System.out.println("The PDF signature is invalid.");
+                    if(pdfFile == null){
+                        PdfSignerGui.setStateLabel("No Pdf provided.");
+                    } else {
+                        boolean isValid = PdfSignerUtil.verifySignature(pdfFile, PdfSignerUtil.readKeyFromFile(pubKeyFile.getAbsolutePath()));
+                        if (isValid) {
+                            System.out.println("The PDF signature is valid.");
+                            setStateLabel("The PDF signature is valid.");
+                        } else {
+                            System.out.println("The PDF signature is invalid.");
+                        }
+                    }
                 }
             } catch (Exception e) {
-                System.err.println("Error during PDF signature verification: " + e.getMessage()); // Use err for errors
-                // Optionally, show an alert to the user
-                // new Alert(Alert.AlertType.ERROR, "Error during PDF signature verification: " + e.getMessage()).showAndWait();
+                System.out.println("Error during PDF signature verification: " + e.getMessage());
+                PdfSignerGui.setStateLabel("Error during PDF signature verification: " + e.getMessage());
             }
         });
         verifyButton.setVisible(false);
 
         Button choosePdf = getButton(stage);
         Label pdfName = new Label("No PDF selected");
-        pdfName.setId("pdfName"); // ID for lookup
+        pdfName.setId("pdfName");
 
         /**
          * @brief Listener for changes in the selected radio button within the ToggleGroup.
@@ -169,6 +183,12 @@ public class PdfSignerGui extends Application {
          * and "Verify PDF Signature" button based on the user's selection
          * (either "Sign a PDF" or "Verify a PDF Signature").
          */
+        Button choosePem = getPemButton(stage);
+        Label pemName = new Label("No public key selected for verification.");
+        pemName.setId("pemName");
+        choosePem.setVisible(false);
+        pemName.setVisible(false);
+
         toggleGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
         {
             /**
@@ -192,18 +212,24 @@ public class PdfSignerGui extends Application {
                         pinField.setVisible(true);
                         signButton.setVisible(true);
                         verifyButton.setVisible(false);
+                        choosePem.setVisible(false);
+                        pemName.setVisible(false);
+                        usbLabel.setVisible(true);
                     }
                     else if (s.equals("Verify a PDF Signature")) {
                         pinField.setVisible(false);
                         verifyButton.setVisible(true);
                         signButton.setVisible(false);
+                        choosePem.setVisible(true);
+                        pemName.setVisible(true);
+                        usbLabel.setVisible(false);
                     }
                 }
             }
         });
         Label stateLabel = new Label("");
-        stateLabel.setId("stateLabel"); // ID for lookup (e.g., by DriveCheck to update USB status)
-        root.getChildren().addAll(welcomeLabel, signPdfRadio, verifyPdfRadio, choosePdf, pdfName, pinField, signButton, verifyButton, stateLabel);
+        stateLabel.setId("stateLabel");
+        root.getChildren().addAll(welcomeLabel, signPdfRadio, verifyPdfRadio, choosePdf, pdfName, choosePem, pemName, usbLabel, pinField, signButton, verifyButton, stateLabel);
         stage.show();
     }
 
@@ -220,8 +246,7 @@ public class PdfSignerGui extends Application {
     private static Button getButton(Stage stage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a PDF File");
-        // Optionally, add file filters if you want to restrict file types
-         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("PDF files (*.pdf)", "*.pdf"));
 
         Button choosePdf = new Button("Choose PDF File");
         /**
@@ -243,6 +268,36 @@ public class PdfSignerGui extends Application {
             }
         });
         return choosePdf;
+    }
+
+    private static Button getPemButton(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select a .pem file");
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("PEM files (*.pem)", "*.pem"));
+
+        Button choosePem = new Button("Choose Public Key File");
+        choosePem.setOnAction(event -> {
+            File file = fileChooser.showOpenDialog(stage);
+            if (file != null) {
+                System.out.println("Selected .pem: " + file.getAbsolutePath());
+                pubKeyFile = file;
+                Label pemName = (Label) stage.getScene().lookup("#pemName");
+                if (pemName != null) {
+                    pemName.setText("Selected .pem: " + file.getName());
+                }
+            }
+        });
+        return choosePem;
+    }
+
+    public static void setStateLabel(String string){
+        Label stateLabel = (Label) scene.lookup("#stateLabel");
+        stateLabel.setText(string);
+    }
+
+    public static void setUsbLabel(String string){
+        Label stateLabel = (Label) scene.lookup("#usbLabel");
+        stateLabel.setText(string);
     }
 
     /**

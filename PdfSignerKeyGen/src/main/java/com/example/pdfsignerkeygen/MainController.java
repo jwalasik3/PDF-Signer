@@ -56,10 +56,11 @@ public class MainController {
         String pin = pinField.getText();
         // Append ".keys\" to the USB path to define the subdirectory for key storage
         String usbPath = usbPathField.getText() + ".keys\\";
+
         try {
             // Call the utility method to generate and encrypt keys
             // The publicKeyPath is set to the same usbPath here based on the current implementation.
-            RSAKeyGenAndEncrypt.encode(pin, usbPath, usbPath);
+            RSAKeyGenAndEncrypt.encode(pin, usbPath, publicKeyPathField.getText());
             responseLabel.setText("Keys generated and stored successfully.");
         } catch (Exception e) {
             // Display a user-friendly error message

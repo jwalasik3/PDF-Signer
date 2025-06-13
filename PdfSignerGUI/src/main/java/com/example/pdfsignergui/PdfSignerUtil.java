@@ -165,6 +165,7 @@ public class PdfSignerUtil {
 
         // Checking if file exists
         if (!certFile.exists()) {
+            PdfSignerGui.setStateLabel("Certificate not found. Please first generate one.");
             throw new FileNotFoundException("Certificate file not found: " + certFile.getAbsolutePath());
         }
 
